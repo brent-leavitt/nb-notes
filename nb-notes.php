@@ -1,12 +1,6 @@
 <?php
 
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
  *
  * @link              https://www.brentleavitt.com
  * @since             1.0.0
@@ -22,8 +16,15 @@
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       nb-notes
- * Domain Path:       /languages
+ * Domain Path:       /app/lang
  */
+
+
+
+namespace Nb_Notes;
+
+use Nb_Notes\App\Clss\Nb_Notes as Notes;
+
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -31,11 +32,17 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
+ * CONSTANTS
  */
-define( 'NB_NOTES_VERSION', '1.0.0' );
+if( !defined( 'NB_NOTES_VERSION' ) )
+	define( 'NB_NOTES_VERSION', '1.0.0' );
+
+if( !defined( 'NB_NOTES_PATH' ) )
+	define( 'NB_NOTES_PATH', plugin_dir_path( __FILE__ ) );
+
+if( !defined( 'NB_NOTES_URL' ) )
+	define( 'NB_NOTES_URL', plugin_dir_url( __FILE__ ) );
+
 
 /**
  * The code that runs during plugin activation.
@@ -58,25 +65,8 @@ function deactivate_nb_notes() {
 register_activation_hook( __FILE__, 'activate_nb_notes' );
 register_deactivation_hook( __FILE__, 'deactivate_nb_notes' );
 
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-nb-notes.php';
 
-/**
- * Begins execution of the plugin.
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
- */
-function run_nb_notes() {
+require NB_NOTES_PATH . '/app/clss/nb-notes.php';
 
-	$plugin = new Nb_Notes();
-	$plugin->run();
-
-}
-run_nb_notes();
+$nb_notes= new Notes();
+$nb_notes->go();

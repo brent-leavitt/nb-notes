@@ -1,18 +1,6 @@
 <?php
 
-/**
- * The file that defines the core plugin class
- *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
- *
- * @link       https://www.brentleavitt.com
- * @since      1.0.0
- *
- * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
- */
-
+Namespace Nb_Notes\App\Clss;
 /**
  * The core plugin class.
  *
@@ -67,64 +55,23 @@ class Nb_Notes {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'NB_NOTES_VERSION' ) ) {
-			$this->version = NB_NOTES_VERSION;
-		} else {
-			$this->version = '1.0.0';
-		}
+
+		$this->autoload(); 
+		
+		register_activation_hook( __FILE__, [ $this, 'activate' ] );
+		register_deactivation_hook( __FILE__, [ $this, 'deactivate']] );
+
+		$this->version = ( defined( 'NB_NOTES_VERSION' ) ) ? NB_NOTES_VERSION : '1.0.0';
 		$this->plugin_name = 'nb-notes';
 
-		$this->load_dependencies();
+		
+		$this->loader = new Nb_Notes_Loader();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
 	}
-
-	/**
-	 * Load the required dependencies for this plugin.
-	 *
-	 * Include the following files that make up the plugin:
-	 *
-	 * - Nb_Notes_Loader. Orchestrates the hooks of the plugin.
-	 * - Nb_Notes_i18n. Defines internationalization functionality.
-	 * - Nb_Notes_Admin. Defines all hooks for the admin area.
-	 * - Nb_Notes_Public. Defines all hooks for the public side of the site.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function load_dependencies() {
-
-		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-nb-notes-loader.php';
-
-		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-nb-notes-i18n.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the admin area.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-nb-notes-admin.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-nb-notes-public.php';
-
-		$this->loader = new Nb_Notes_Loader();
-
-	}
+	
 
 	/**
 	 * Define the locale for this plugin for internationalization.
@@ -215,4 +162,56 @@ class Nb_Notes {
 		return $this->version;
 	}
 
-}
+	
+	/**
+	 * Activate the plugin
+	 *
+	 * @since     1.0.0
+	 * @return    void
+	 */
+	public function activate() {
+		
+		do_action( 'nb_notes_activate' );
+		echo "<p>"; 
+			_e( "The plugin has been activated! Whoop!", 'nb-notes' ); 
+		echo "</p>";
+
+	}
+
+
+	
+	/**
+	 * Runs on plugin Deactivation
+	 *
+	 * @since     1.0.0
+	 * @return    void
+	 */
+	public function deactivate() {
+		
+		do_action( 'nb_notes_deactivate' );
+
+
+	}
+
+
+	
+	/**
+	 *	This loads all classes, as needed, automatically! Slick!
+	 *
+	 * @since     1.0.0
+	 * @return    void
+	**/
+
+	private function autoload(){
+				
+		spl_autoload_register( function( $class ){
+			
+			$path = strtolower( str_replace( '\\', '/', $class) );				
+			$path = str_replace( 'nb_note/', '', $path );				
+			$path = NB_NOTES_PATH. $path . '.class.php';
+			
+			if( file_exists( $path ) )
+				require $path;
+			
+		} );
+	} 
