@@ -1,14 +1,6 @@
 <?php
 
-/**
- * Fired during plugin deactivation
- *
- * @link       https://www.brentleavitt.com
- * @since      1.0.0
- *
- * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
- */
+Namespace Nb_Notes\App\Clss;
 
 /**
  * Fired during plugin deactivation.
@@ -17,9 +9,10 @@
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
+ * @subpackage Nb_Notes/App/Clss
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
+
 class Nb_Notes_Deactivator {
 
 	/**

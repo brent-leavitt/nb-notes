@@ -1,17 +1,6 @@
 <?php
 
-/**
- * Define the internationalization functionality
- *
- * Loads and defines the internationalization files for this plugin
- * so that it is ready for translation.
- *
- * @link       https://www.brentleavitt.com
- * @since      1.0.0
- *
- * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
- */
+Namespace Nb_Notes\App\Clss;
 
 /**
  * Define the internationalization functionality.
@@ -21,10 +10,11 @@
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
+ * @subpackage Nb_Notes/App/Clss
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
-class Nb_Notes_i18n {
+
+class Nb_Notes_I18n {
 
 
 	/**
@@ -37,7 +27,7 @@ class Nb_Notes_i18n {
 		load_plugin_textdomain(
 			'nb-notes',
 			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
+			NB_NOTES_PATH . '/app/lang/'
 		);
 
 	}

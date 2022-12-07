@@ -12,29 +12,20 @@ Namespace Nb_Notes\App\Clss;
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
+ * @subpackage Nb_Notes/App/Clss/
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
-class Nb_Notes {
 
-	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      Nb_Notes_Loader    $loader    Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
+class Nb_Notes {
 
 	/**
 	 * The unique identifier of this plugin.
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+	 * @var      string    $name    The string used to uniquely identify this plugin.
 	 */
-	protected $plugin_name;
+	protected $name;
 
 	/**
 	 * The current version of the plugin.
@@ -54,24 +45,52 @@ class Nb_Notes {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
+	public function go() {
+		
+		$this->version = ( defined( 'NB_NOTES_VERSION' ) ) ? NB_NOTES_VERSION : '1.0.0';
+		$this->name = 'nb-notes';
+
+		add_action( 'init', [$this, 'depends_on'] );  
 
 		$this->autoload(); 
-		
+		$this->required(); 
+
 		register_activation_hook( __FILE__, [ $this, 'activate' ] );
-		register_deactivation_hook( __FILE__, [ $this, 'deactivate']] );
+		register_deactivation_hook( __FILE__, [ $this, 'deactivate'] );
 
-		$this->version = ( defined( 'NB_NOTES_VERSION' ) ) ? NB_NOTES_VERSION : '1.0.0';
-		$this->plugin_name = 'nb-notes';
 
-		
-		$this->loader = new Nb_Notes_Loader();
+
 		$this->set_locale();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
+		
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_public_scripts' ] );
+		
 
 	}
 	
+	/**
+	 * Checks and set plugin dependencies
+	 * Buggy and not ideal. Needs a little more thought. 
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 */
+	public function depends_on() {
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			include_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		}
+
+		if ( current_user_can( 'activate_plugins' ) && !defined( 'DOULA_COURSE_PATH' ) ) {
+			
+			// Deactivate the plugin.
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+			
+			// Throw an error in the WordPress admin console.
+			$error_message = '<p>' . esc_html__( 'This plugin requires LearnDash-NBCS plugin to also be installed and active!', 'nb-notes' ). '</p>';
+			//print( $error_message ); 
+		}
+	}
+
 
 	/**
 	 * Define the locale for this plugin for internationalization.
@@ -84,52 +103,53 @@ class Nb_Notes {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Nb_Notes_i18n();
-
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
-	}
-
-	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_admin_hooks() {
-
-		$plugin_admin = new Nb_Notes_Admin( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$plugin_i18n = new Nb_Notes_I18n();
+		add_action( 'plugins_loaded', [ $plugin_i18n, 'load_plugin_textdomain'] );
 
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
+	 * Register Scripts for Admin Area
 	 *
 	 * @since    1.0.0
-	 * @access   private
+	 * @access   public
 	 */
-	private function define_public_hooks() {
+	public function enqueue_admin_scripts() {
 
-		$plugin_public = new Nb_Notes_Public( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		$this->enqueue_scripts_styles( 'admin' );
 	}
 
 	/**
-	 * Run the loader to execute all of the hooks with WordPress.
+	 * Register Scripts for Public
 	 *
 	 * @since    1.0.0
+	 * @access   public
 	 */
-	public function run() {
-		$this->loader->run();
+	public function enqueue_public_scripts() {
+	
+		$this->enqueue_scripts_styles( 'public' );
+	
 	}
+
+
+	/**
+	 * Enqueue Scripts and Styles based on 
+	 *
+	 * @since     1.0.0
+	 * @param     $view
+	 * @return    string    The name of the plugin.
+	 */
+	private function enqueue_scripts_styles( $view ) {
+		$path = NB_NOTES_URL . 'app/tmp/'. $view;
+
+		//stylesheets
+		wp_enqueue_style( $this->name, $path .'/css/nb-notes-'. $view .'.css', array(), $this->version, 'all' );
+
+		//javascript/jquery
+		wp_enqueue_script( $this->name, $path . '/js/nb-notes-'. $view .'.js', array( 'jquery' ), $this->version, false );
+
+	}
+
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
@@ -139,17 +159,7 @@ class Nb_Notes {
 	 * @return    string    The name of the plugin.
 	 */
 	public function get_plugin_name() {
-		return $this->plugin_name;
-	}
-
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Nb_Notes_Loader    Orchestrates the hooks of the plugin.
-	 */
-	public function get_loader() {
-		return $this->loader;
+		return $this->name;
 	}
 
 	/**
@@ -171,10 +181,8 @@ class Nb_Notes {
 	 */
 	public function activate() {
 		
+		Nb_Notes_Activator::activate(); 
 		do_action( 'nb_notes_activate' );
-		echo "<p>"; 
-			_e( "The plugin has been activated! Whoop!", 'nb-notes' ); 
-		echo "</p>";
 
 	}
 
@@ -188,8 +196,8 @@ class Nb_Notes {
 	 */
 	public function deactivate() {
 		
+		Nb_Notes_Deactivator::deactivate(); 
 		do_action( 'nb_notes_deactivate' );
-
 
 	}
 
@@ -207,11 +215,39 @@ class Nb_Notes {
 		spl_autoload_register( function( $class ){
 			
 			$path = strtolower( str_replace( '\\', '/', $class) );				
-			$path = str_replace( 'nb_note/', '', $path );				
+			$path = str_replace( 'nb_notes/', '', $path );				
+			$path = str_replace( '_', '-', $path );				
 			$path = NB_NOTES_PATH. $path . '.class.php';
-			
+
 			if( file_exists( $path ) )
 				require $path;
 			
 		} );
+	} 	
+	/**
+	 *	This loads all required function files. 
+	 *
+	 * @since     1.0.0
+	 * @return    void
+	**/
+
+	private function required(){
+				
+		$functions = [
+			'',
+			''
+
+		]; 
+
+		foreach( $functions as $func ){
+
+			$path = 'app/func/'. $func; 			
+			$path = NB_NOTES_PATH. $path .'.php';
+			
+			if( file_exists( $path ) )
+				require $path;
+			
+		}
 	} 
+
+}

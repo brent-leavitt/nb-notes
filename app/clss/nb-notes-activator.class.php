@@ -1,14 +1,6 @@
 <?php
 
-/**
- * Fired during plugin activation
- *
- * @link       https://www.brentleavitt.com
- * @since      1.0.0
- *
- * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
- */
+Namespace Nb_Notes\App\Clss;
 
 /**
  * Fired during plugin activation.
@@ -17,7 +9,7 @@
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/includes
+ * @subpackage Nb_Notes/App/Clss/
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
 class Nb_Notes_Activator {
@@ -30,6 +22,11 @@ class Nb_Notes_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+
+		
+		echo "<p>"; 
+			_e( "The plugin has been activated! Whoop!", 'nb-notes' ); 
+		echo "</p>";
 
 	}
 
