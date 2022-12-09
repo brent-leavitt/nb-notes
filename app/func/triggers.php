@@ -1,9 +1,11 @@
 <?php 
+
 Namespace Nb_Notes\App\Func;
-//use ; 
+use Nb_Notes\App\Clss\Trigger; 
+
 
 /**
- * (description here)
+ * Triggers to be used throughout the NB_Notes Plugin
  *
  * @since      1.0.0
  * @package    Nb_Notes
@@ -12,8 +14,13 @@ Namespace Nb_Notes\App\Func;
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
- 
- 
+
+//SETUP TRIGGERS
+$nb_triggers = [
+    '(trigger_name)' => [ '(action_hooks)' ],
+    '(trigger_name)' => [ '(action_hooks)' ],
+
+]  
 
 
 
