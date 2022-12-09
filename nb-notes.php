@@ -22,9 +22,7 @@
 
 
 namespace Nb_Notes;
-
 use Nb_Notes\App\Clss\Nb_Notes as Notes;
-
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -43,27 +41,8 @@ if( !defined( 'NB_NOTES_PATH' ) )
 if( !defined( 'NB_NOTES_URL' ) )
 	define( 'NB_NOTES_URL', plugin_dir_url( __FILE__ ) );
 
-
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-nb-notes-activator.php
- */
-function activate_nb_notes() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-nb-notes-activator.php';
-	Nb_Notes_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-nb-notes-deactivator.php
- */
-function deactivate_nb_notes() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-nb-notes-deactivator.php';
-	Nb_Notes_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_nb_notes' );
-register_deactivation_hook( __FILE__, 'deactivate_nb_notes' );
+if( !defined( 'NB_NOTES_NAME' ) )
+	define( 'NB_NOTES_NAME', plugin_basename( __FILE__ ) );
 
 
 require NB_NOTES_PATH . '/app/clss/nb-notes.php';

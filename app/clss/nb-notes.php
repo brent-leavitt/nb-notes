@@ -47,9 +47,11 @@ class Nb_Notes {
 	 */
 	public function go() {
 		
+		//set basic parameters. 
 		$this->version = ( defined( 'NB_NOTES_VERSION' ) ) ? NB_NOTES_VERSION : '1.0.0';
 		$this->name = 'nb-notes';
 
+		//buggy, not fully working as expected. 
 		add_action( 'init', [$this, 'depends_on'] );  
 
 		$this->autoload(); 
@@ -81,13 +83,14 @@ class Nb_Notes {
 		}
 
 		if ( current_user_can( 'activate_plugins' ) && !defined( 'DOULA_COURSE_PATH' ) ) {
-			
-			// Deactivate the plugin.
-			deactivate_plugins( plugin_basename( __FILE__ ) );
-			
+
 			// Throw an error in the WordPress admin console.
-			$error_message = '<p>' . esc_html__( 'This plugin requires LearnDash-NBCS plugin to also be installed and active!', 'nb-notes' ). '</p>';
+			$error_message = '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'This plugin requires LearnDash-NBCS plugin to also be installed and active!', 'nb-notes' ). '</p></div>';
+			add_action( 'admin_notices', function( $error_message ){ print( $error_message ); } ); 
 			//print( $error_message ); 
+
+			// Deactivate the plugin.
+			deactivate_plugins( NB_NOTES_NAME );
 		}
 	}
 
@@ -140,7 +143,7 @@ class Nb_Notes {
 	 * @return    string    The name of the plugin.
 	 */
 	private function enqueue_scripts_styles( $view ) {
-		$path = NB_NOTES_URL . 'app/tmp/'. $view;
+		$path = NB_NOTES_URL . 'app/tmpl/'. $view;
 
 		//stylesheets
 		wp_enqueue_style( $this->name, $path .'/css/nb-notes-'. $view .'.css', array(), $this->version, 'all' );
