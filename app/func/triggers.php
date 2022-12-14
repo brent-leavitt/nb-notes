@@ -17,19 +17,33 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 //SETUP TRIGGERS
 $nb_triggers = [
-    'ASSIGNMENT_SUBMITTED',
-    'ASSIGNMENT_RESUBMITTED',
-    'ASSIGNMENT_INCOMPLETE',
-    'ASSIGNMENT_GRADED',
-    'TRAINER_NEW_STUDENT',
-    'TRAINER_REASSIGNMENT',
-    'NEW_STUDENT_COMMENT',
-    'NEW_TRAINER_COMMENT',
-    'NEW_STUDENT_REGISTRATION',
-    'NEW_STUDENT_VERIFICATION',
-    'PASSWORD_RESET', 
+    'Assignment_Submitted',
+    'Assignment_Resubmitted',
+    'Assignment_Incomplete',
+    'Assignment_Graded',
+    'Trainer_New_Student',
+    'Trainer_Reassignment',
+    'New_Student_comment',
+    'New_Trainer_Comment',
+    'New_Student_Registration',
+    'New_Student_Verification',
+    'Password_Reset', 
+    'Certification_Complete',
+    'Certification_Pending',
+    'Certification_Issued',
+    'Certification_Renewal_Started',
+    'Certification_Renewal_Pending',
+    'Certification_Renewal_Complete',
     //what else? 
 ]; 
+
+
+/**
+ * Instantiate each trigger and make it listen. 
+ *
+ * @since     1.0.0
+ * @return    void
+ */
 
 function nb_make_triggers_listen( $triggers )
 {
@@ -41,18 +55,27 @@ function nb_make_triggers_listen( $triggers )
         }
 } 
 
+
+/**
+ * At plugin activation, available Nb_Note_Triggers will be stored in the options table for templates to be linked to. 
+ *
+ * @since     1.0.0
+ * @return    void
+ */
+
 function nb_activate_triggers(){
     global $nb_triggers; 
   
     if( !get_option( 'nb_notes_trigger_templates' ) )
     {
-        //array of triggers set with empty arrays set as a holding bay for indexing of trigger templates (Nb_Notes_Templates CPTs)
+        //array of triggers set with empty sub-arrays set as a holding bay for indexing of trigger templates (Nb_Notes_Templates CPTs)
         $base_triggers_array = []; 
         foreach( $nb_triggers as $trigger )
             $base_triggers_array[ $trigger ] = []; 
 
         add_option( 'nb_notes_trigger_templates', $base_triggers_array ); 
     }
+
 }
 
 add_action( 'nb_notes_activate', 'Nb_Notes\App\Func\nb_activate_triggers' ); 
