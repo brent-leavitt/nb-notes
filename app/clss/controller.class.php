@@ -124,7 +124,7 @@ if( !class_exists( 'Controller' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
-		private $; 
+		private $__; 
 
 		
 
@@ -135,34 +135,86 @@ if( !class_exists( 'Controller' ) ){
 		 * (description)
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
+		 * @param     int 		$receiver_id 	//Who is receiving the notificaiton
+		 * @param     int 		$sender_id 		//Who is sending the notificaiton
+		 * @param     string 	$slug 			//the type of notification
+		 * @param     array 	$params 		//
+		 * @param     bool	 	$html 			//html or plain text
+		 * @return    void
 		 */
-		public function __construct(  ){
+		public function __construct(  $receiver_id, $sender_id, $slug, $params, $html  ){
+			
+			$this->set_receiver( $receiver_id );
+			$this->set_sender( $sender_id );
+			$this->set_slug( $slug );
+			$this->set_params( $params ); 
+			$this->set_html( $html ); 
 				
-				
-				
+			$this->init(); 
+			
 		}
 		
 		
 		/**
-		 * (description)
+		 * Setup our classes that we need to control
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
+		 * @return    void
+		 */
+		private function init() {
+
+			//Build notification
+			$this->builder 		= new $slug(); 
+			$this->sender 		= new Sender(); 
+			$this->recorder 	= new Recorder(); 
+			$this->admin_noter 	= new Admin_Noter(); 
+			
+		}	
+
+
+		/**
+		 * Makes the magic happen. This is called externally
+		 *
+		 * @since     1.0.0
+		 * @return    void
 		 */
 		public function go() {
 
-			//Build notification
-			$this->builder = new $slug(); 
-			$content = $this->builder->build( $this->params ); 
+			//prepare the package to be sent
+			$package = $this->prepare(); 
 			
 			//Send the email
-			if( $this->builder->do_email() )
-				$this->sender
+			$sent = ( $this->builder->do_email() )? 
+					$this->sender->send($package, $this->html ):
+					false;
+			
+			//make a record of our actions.
+			$this->recorder->record( $package, $sent ); 
+
+			//Add Admin_Note meta data to student file (if applicable)
+			if( method_exists( $this->builder->get_admin_note() ) &&
+				( $admin_note =  $this->builder->get_admin_note() ) )
+				$this->admin_noter->add_note( $this->receiver_id, $this->sender_id, $admin_note ); 
 		}	
 
+		
+		/**
+		 * Prepares notification content. 
+		 *
+		 * @since     1.0.0
+		 * @return    array
+		 */
+		private function prepare(   )
+		{
+			$this->builder->build( $this->params );
+
+			return array(
+				'receiver' 	=>	$this->receiver_id, 
+				'sender' 	=>	$this->sender_id, 
+				'subject' 	=>	$this->builder->get_subject(),
+				'content'	=>	$this->builder->get_content()
+			); 
+		}
 		
 		
 		/**
@@ -179,7 +231,6 @@ if( !class_exists( 'Controller' ) ){
 		}
 		
 		
-		
 		/**
 		 * Sets the sender of the notice by their ID. 
 		 *
@@ -192,7 +243,6 @@ if( !class_exists( 'Controller' ) ){
 			$this->sender_id = $sender_id;
 			
 		}
-		
 		
 		
 		/**
@@ -210,7 +260,6 @@ if( !class_exists( 'Controller' ) ){
 		}
 		
 		
-		
 		/**
 		 * Array of parameters that are available for the given notificaiton
 		 *
@@ -225,7 +274,6 @@ if( !class_exists( 'Controller' ) ){
 		}
 		
 		
-		
 		/**
 		 * Sets whether HTML is true or false. 
 		 *
@@ -238,9 +286,8 @@ if( !class_exists( 'Controller' ) ){
 			$this->html = $html; 
 			
 		}
-		
-		
-		
+
+				
 		/**
 		 * (description)
 		 *
@@ -253,9 +300,6 @@ if( !class_exists( 'Controller' ) ){
 			
 		}
 			
-
-		
-		
 		/**
 		 * (description)
 		 *
@@ -269,8 +313,6 @@ if( !class_exists( 'Controller' ) ){
 			
 		
 		}
-
-
 
 	}
 

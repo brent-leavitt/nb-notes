@@ -30,12 +30,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 function nb_notifiy( int $receiver_id, int $sender_id, string $slug, array $params, bool $html = true ):bool
 {
 
-    $control =  new Controller(); 
-    $control->set_receiver( $receiver_id );
-    $control->set_sender( $sender_id );
-    $control->set_slug( $slug );
-    $control->set_params( $params ); 
-    $control->set_html( $html ); 
+    $control =  new Controller( $receiver_id, $sender_id, $slug, $params, $html ); 
+
     $control->go();  
 
     return $control->get_result();  
