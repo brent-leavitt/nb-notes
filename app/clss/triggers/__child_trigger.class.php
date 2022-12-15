@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
 if( !class_exists( '' ) ){ 
-	class Child_Trigger extends Trigger implements Trigger { 
+	class  extends Trigger { 
 
 		/**
 		 * (description)

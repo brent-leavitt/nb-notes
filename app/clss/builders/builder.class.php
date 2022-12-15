@@ -1,23 +1,23 @@
 <?php 
 
-Namespace Nb_Notes\App\Clss\Triggers;
+Namespace Nb_Notes\App\Clss\Builder;
 //use ; 
 
 
 /**
- * This is the base class for trigger objects for all things that they share in common. 
+ * This is the abstract builder class for building content to be sent in notices. 
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/App/Clss/Triggers/
+ * @subpackage Nb_Notes/App/Clss/Builder/
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Trigger' ) ){ 
-	abstract class Trigger implements Trigger_Interface { 
+if( !class_exists( 'Builder' ) ){ 
+	class Builder implements Builder_Interface { 
 
 		/**
 		 * (description)

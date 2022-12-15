@@ -118,13 +118,13 @@ if( !class_exists( 'Controller' ) ){
 		
 
 		/**
-		 * 
+		 * the result of our actions. 
 		 *
 		 * @since    1.0.0
 		 * @access   private 
-		 * @var      (type)    $name   (description)
+		 * @var      bool
 		 */
-		private $__; 
+		private $result = false; 
 
 		
 
@@ -142,19 +142,37 @@ if( !class_exists( 'Controller' ) ){
 		 * @param     bool	 	$html 			//html or plain text
 		 * @return    void
 		 */
-		public function __construct(  $receiver_id, $sender_id, $slug, $params, $html  ){
+
+		public function __construct(  $receiver_id, $sender_id, $slug, $params, $html )
+		{
 			
-			$this->set_receiver( $receiver_id );
-			$this->set_sender( $sender_id );
-			$this->set_slug( $slug );
-			$this->set_params( $params ); 
-			$this->set_html( $html ); 
+			$this->set( 'receiver_id', $receiver_id );
+			$this->set( 'sender_id', $sender_id );
+			$this->set( 'slug', $slug );
+			$this->set( 'params' $params ); 
+			$this->set( 'html', $html ); 
 				
 			$this->init(); 
 			
 		}
 		
+
+		/**
+		 * set properties
+		 *
+		 * @since     1.0.0
+		 * @param     string $name
+		 * @param     mixed $val
+		 * @return    void 
+		 */	 
+		public function set( $name, $val)
+		{
+
+			$this->$name = $val; 
 		
+		}
+
+
 		/**
 		 * Setup our classes that we need to control
 		 *
@@ -195,6 +213,8 @@ if( !class_exists( 'Controller' ) ){
 			if( method_exists( $this->builder->get_admin_note() ) &&
 				( $admin_note =  $this->builder->get_admin_note() ) )
 				$this->admin_noter->add_note( $this->receiver_id, $this->sender_id, $admin_note ); 
+			
+			$this->set( 'result', $sent ); 
 		}	
 
 		
@@ -216,88 +236,18 @@ if( !class_exists( 'Controller' ) ){
 			); 
 		}
 		
-		
-		/**
-		 * Sets the receiver of the notice by their ID. 
-		 *
-		 * @since     1.0.0
-		 * @param     bool $receiver_id
-		 * @return    void
-		 */
-		private function set_receiver( $receiver_id )
-		{
-			$this->receiver_id = $receiver_id;
-			
-		}
-		
-		
-		/**
-		 * Sets the sender of the notice by their ID. 
-		 *
-		 * @since     1.0.0
-		 * @param     bool $sender_id
-		 * @return    void
-		 */
-		private function set_sender( $sender_id = 0 )
-		{
-			$this->sender_id = $sender_id;
-			
-		}
-		
-		
-		/**
-		 * Sets the slug by which template classes are called. 
-		 *
-		 * @since     1.0.0
-		 * @param     string $slug
-		 * @return    void
-		 */
-		private function set_slug( $slug )
-		{
-			$this->slug = $slug;
-
-			
-		}
-		
-		
-		/**
-		 * Array of parameters that are available for the given notificaiton
-		 *
-		 * @since     1.0.0
-		 * @param     array $params
-		 * @return    void
-		 */
-		private function set_params( $params )
-		{
-			$this->params = $params; 
-			
-		}
-		
-		
-		/**
-		 * Sets whether HTML is true or false. 
-		 *
-		 * @since     1.0.0
-		 * @param     $html
-		 * @return    void
-		 */
-		private function set_html( $html )
-		{
-			$this->html = $html; 
-			
-		}
+	
 
 				
 		/**
-		 * (description)
+		 * Get the result of the action taken. 
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
+		 * @return    bool
 		 */
-		private function get_(){
+		public function get_result(){
 		
-			
+			return $this->result; 			
 		}
 			
 		/**

@@ -16,8 +16,8 @@ Namespace Nb_Notes\App\Clss\Triggers;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !interface_exists( 'Trigger' ) ){ 
-	interface Trigger { 
+if( !interface_exists( 'Trigger_Interface' ) ){ 
+	interface Trigger_Interface { 
 
 		
 		//Methods Definitions
