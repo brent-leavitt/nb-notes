@@ -36,23 +36,12 @@ if( !interface_exists( 'Trigger_Interface' ) ){
 		 * The base action that gets called when a listener picks up an action to perform. 
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
+		 * @param     array ...$args
+		 * @return    void
 		 */
-		public function init();
+		public function init( ...$args );
 		
 
-		
-		
-		/**
-		 * After the work is done, this must be called. 
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		protected function send();
-		
 		
 		
 	}	

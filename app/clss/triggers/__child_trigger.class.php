@@ -48,20 +48,36 @@ if( !class_exists( '' ) ){
 		
 		
 		/**
-		 * (description)
+		 * Listening for 
 		 *
 		 * @since     1.0.0
 		 * @param     $view
 		 * @return    (type)    (description)
-		 */
-		public function init() {
+		 */	 
+		public function listen()
+		{
 
+			add_action( 'nb_', [ $this, 'init' ] ); 
+		
+		}
 			
-			//The last thing to do. 
-			$this->send();
+		
+		/**
+		 * Initializes and executes the action hook //NEEDS WORK BECAUSE IT NEEDS TO LISTEN TO THE INCOMING PARAMATERS. 
+		 *
+		 * @since     1.0.0
+		 * @param     array ...$args
+		 * @return    void
+		 */
+
+		 public function init( ...$args ) {
+
+			//This is where the incoming parameter data is received. 
+
+			//pull the trigger. 
+			$this->fire(); 
 		}	
 
-		
 		
 		/**
 		 * (description)
@@ -89,24 +105,6 @@ if( !class_exists( '' ) ){
 		
 			
 		}
-			
-
-		
-		
-		/**
-		 * Listening for 
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */	 
-		public function listen()
-		{
-
-			add_action( 'nb_', [ $this, 'init' ] ); 
-		
-		}
-
 	
 		
 		
@@ -123,8 +121,6 @@ if( !class_exists( '' ) ){
 			
 		
 		}
-
-
 
 	}
 
