@@ -5,7 +5,7 @@ Namespace Nb_Notes\App\Clss;
 
 
 /**
- * (description here)
+ * This class handles database communication with the plugin
  *
  * @since      1.0.0
  * @package    Nb_Notes
@@ -16,8 +16,18 @@ Namespace Nb_Notes\App\Clss;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( '' ) ){ 
-	class  { 
+if( !class_exists( 'Recorder' ) ){ 
+	class Recorder { 
+
+		/**
+		 * The default WordPress Database Object
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      object
+		 */
+		private $db 
+		
 
 		/**
 		 * (description)

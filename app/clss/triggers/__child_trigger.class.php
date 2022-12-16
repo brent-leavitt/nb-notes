@@ -1,7 +1,7 @@
 <?php 
 
 Namespace Nb_Notes\App\Clss\Triggers;
-//use ; 
+use function Nb_Notes\App\Func\notify; 
 
 
 /**
@@ -57,7 +57,8 @@ if( !class_exists( '' ) ){
 		public function init() {
 
 			
-		
+			//The last thing to do. 
+			$this->send();
 		}	
 
 		
@@ -102,26 +103,11 @@ if( !class_exists( '' ) ){
 		public function listen()
 		{
 
-			
+			add_action( 'nb_', [ $this, 'init' ] ); 
 		
 		}
 
-		
-		
-		/**
-		 * The initial call 
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */	 
-		public function send()
-		{
-
-			
-		
-		}
-
+	
 		
 		
 		/**

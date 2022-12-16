@@ -19,6 +19,38 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 if( !class_exists( 'Builder' ) ){ 
 	class Builder implements Builder_Interface { 
 
+		//Props
+
+		/**
+		 * The body of the notification to be sent. 
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      string
+		 */
+		private $content; 
+		
+		
+		/**
+		 * The title of the notification to be sent.
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      string
+		 */
+		private $subject; 
+		
+		
+		/**
+		 * Whether or not this notification requires an email to be sent. 
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      (type)    $name   (description)
+		 */
+		private $is_email = true; 
+		
+		
 		/**
 		 * (description)
 		 *
@@ -31,7 +63,7 @@ if( !class_exists( 'Builder' ) ){
 		
 
 		
-		//Then Methods
+		//Methods
 
 		/**
 		 * (description)
@@ -89,6 +121,54 @@ if( !class_exists( 'Builder' ) ){
 			
 		}
 			
+
+		
+		
+		/**
+		 * Returns the content of the builder
+		 *
+		 * @since     1.0.0
+		 * @return    string
+		 */	 
+		public function get_content()
+		{
+
+			return $this->content ?? ''; 
+		
+		}
+
+
+		
+		
+		/**
+		 * Returns the subject of the notification
+		 *
+		 * @since     1.0.0
+		 * @return    string
+		 */	 
+		public function get_subject()
+		{
+
+			return $this->subject ?? ''; 
+		
+		}
+
+
+		
+		
+		/**
+		 * Returns whether or not this notification is an email
+		 *
+		 * @since     1.0.0
+		 * @return    bool
+		 */	 
+		public function is_email()
+		{
+
+			return $this->is_email; 
+		
+		}
+
 
 		
 		

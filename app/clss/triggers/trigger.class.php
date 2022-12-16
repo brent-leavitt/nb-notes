@@ -20,13 +20,65 @@ if( !class_exists( 'Trigger' ) ){
 	abstract class Trigger implements Trigger_Interface { 
 
 		/**
+		 * Who is this email being sent to?
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      int    
+		 */
+		protected $receiver_id; 
+		
+		
+		/**
+		 * Who is sending the email? 
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      int 
+		 */
+		protected $sender_id; 
+		
+		
+		/**
+		 * Slug of the builder name
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      string
+		 */
+		protected $builder; 
+		
+		
+		/**
+		 * Availale parameters or arguments for this notification
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      array
+		 */
+		protected $args; 
+		
+		
+		
+		/**
+		 * The IDs of the notification CPT templates created by an admin_user and stored in options table. 
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      array
+		 */
+		protected $templates; 
+		
+		
+
+		/**
 		 * (description)
 		 *
 		 * @since    1.0.0
-		 * @access   private 
+		 * @access   protected 
 		 * @var      (type)    $name   (description)
 		 */
-		private $; 
+		protected $; 
 		
 		
 
@@ -45,20 +97,26 @@ if( !class_exists( 'Trigger' ) ){
 				
 				
 		}
-		
-		
+
+
+
 		/**
-		 * (description)
+		 * The final action to be taken by any trigger 
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		public function init() {
+		 * @param     string 	$builder
+		 * @param     array 	$params
+		 * @param     bool 		$html
+		 * @return    void
+		 */	 
 
-			
-		
-		}	
+		protected function send( $builder, $params, $html )
+		{
+			$sender_id = 0; //system generated 
+			$sent = notifiy( $this->receiver_id, $sender_id, $builder, $params, $html ); 
+			//Could process this further to back up or make more redundant.
+		}
+	
 
 		
 		
@@ -75,7 +133,23 @@ if( !class_exists( 'Trigger' ) ){
 			
 		}
 		
+				
 		
+		/**
+		 * Loads the IDs for all Notification templates for this particular trigger
+		 *
+		 * @since     1.0.0
+		 * @return    void
+		 */
+		protected function get_templates_ids(){
+			
+			$templates  = get_option( 'nb_notes_templates' ); 
+
+			//sets the array of notification CPT ids, if there be any set.  
+			if( isset(  $templates[ $this::TRIGGER ] ) )
+				$this->templates =  $templates[ $this::TRIGGER ];
+	
+		}
 		
 		/**
 		 * (description)

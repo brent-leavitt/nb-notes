@@ -50,17 +50,6 @@ if( !class_exists( 'Controller' ) ){
 		 */
 		private $recorder; 
 		
-		
-
-		/**
-		 * Records admin_notes for a user (when needed). 
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      object    $name   (description)
-		 */
-		private $admin_noter; 
-
 
 		/**
 		 * Who receives the notice. 
@@ -185,7 +174,6 @@ if( !class_exists( 'Controller' ) ){
 			$this->builder 		= new $slug(); 
 			$this->sender 		= new Sender(); 
 			$this->recorder 	= new Recorder(); 
-			$this->admin_noter 	= new Admin_Noter(); 
 			
 		}	
 
@@ -202,8 +190,8 @@ if( !class_exists( 'Controller' ) ){
 			$package = $this->prepare(); 
 			
 			//Send the email
-			$sent = ( $this->builder->do_email() )? 
-					$this->sender->send($package, $this->html ):
+			$sent = ( $this->builder->is_email() )? 
+					$this->sender->send( $package, $this->html ):
 					false;
 			
 			//make a record of our actions.
@@ -212,7 +200,7 @@ if( !class_exists( 'Controller' ) ){
 			//Add Admin_Note meta data to student file (if applicable)
 			if( method_exists( $this->builder->get_admin_note() ) &&
 				( $admin_note =  $this->builder->get_admin_note() ) )
-				$this->admin_noter->add_note( $this->receiver_id, $this->sender_id, $admin_note ); 
+				$this->recorder->add_admin_note( $this->receiver_id, $this->sender_id, $admin_note ); 
 			
 			$this->set( 'result', $sent ); 
 		}	
@@ -232,7 +220,8 @@ if( !class_exists( 'Controller' ) ){
 				'receiver' 	=>	$this->receiver_id, 
 				'sender' 	=>	$this->sender_id, 
 				'subject' 	=>	$this->builder->get_subject(),
-				'content'	=>	$this->builder->get_content()
+				'content'	=>	$this->builder->get_content(),
+				//Could add an array of attachment links here.  
 			); 
 		}
 		

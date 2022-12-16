@@ -33,13 +33,25 @@ if( !interface_exists( 'Trigger_Interface' ) ){
 		
 		
 		/**
-		 * The base action that gets caleld when a listener picks up an action to perform. 
+		 * The base action that gets called when a listener picks up an action to perform. 
 		 *
 		 * @since     1.0.0
 		 * @param     $view
 		 * @return    (type)    (description)
 		 */
-		private function send();
+		public function init();
+		
+
+		
+		
+		/**
+		 * After the work is done, this must be called. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */
+		protected function send();
 		
 		
 		
