@@ -47,5 +47,41 @@ if( !defined( 'NB_NOTES_NAME' ) )
 
 require NB_NOTES_PATH . '/app/clss/nb-notes.php';
 
+register_activation_hook( __FILE__, '\Nb_Notes\activate'  );
+
+register_deactivation_hook( __FILE__, '\Nb_Notes\deactivate' );
+
+	
+/**
+ * Activate the plugin
+ *
+ * @since     1.0.0
+ * @return    void
+ */
+function activate() {
+	
+	//\Nb_Notes\App\Clss\Nb_Notes_Activator::activate(); 
+	do_action( 'nb_notes_activate' );
+
+}
+
+
+
+/**
+ * Runs on plugin Deactivation
+ *
+ * @since     1.0.0
+ * @return    void
+ */
+function deactivate() {
+	
+	//\Nb_Notes\App\Clss\Nb_Notes_Deactivator::deactivate(); 
+	do_action( 'nb_notes_deactivate' );
+
+}
+
+
+
+
 $nb_notes= new Notes();
 $nb_notes->go();

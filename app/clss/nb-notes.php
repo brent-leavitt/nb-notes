@@ -57,11 +57,6 @@ class Nb_Notes {
 		$this->autoload(); 
 		$this->required(); 
 
-		register_activation_hook( __FILE__, [ $this, 'activate' ] );
-		register_deactivation_hook( __FILE__, [ $this, 'deactivate'] );
-
-
-
 		$this->set_locale();
 		
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
@@ -237,8 +232,10 @@ class Nb_Notes {
 	private function required(){
 				
 		$functions = [
-			'',
-			''
+			'actions',
+			'setup',
+			'triggers',
+			//''
 
 		]; 
 

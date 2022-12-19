@@ -26,6 +26,15 @@ if( !class_exists( '' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
+		private TRIGGER = 'Assignment_Submitted'; 
+		
+		/**
+		 * (description)
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      (type)    $name   (description)
+		 */
 		private $; 
 		
 		

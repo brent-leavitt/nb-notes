@@ -16,7 +16,7 @@ use Nb_Notes\App\Clss\Trigger;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 //SETUP TRIGGERS
-$nb_triggers = [
+const TRIGGERS = [
     'Assignment_Submitted',
     'Assignment_Resubmitted',
     'Assignment_Incomplete',
@@ -64,14 +64,18 @@ function nb_make_triggers_listen( $triggers )
  */
 
 function nb_activate_triggers(){
-    global $nb_triggers; 
   
     if( !get_option( 'nb_notes_trigger_templates' ) )
     {
+        
+        error_log(  var_export( \Nb_Notes\App\Func\TRIGGERS, true ) ); 
         //array of triggers set with empty sub-arrays set as a holding bay for indexing of trigger templates (Nb_Notes_Templates CPTs)
         $base_triggers_array = []; 
-        foreach( $nb_triggers as $trigger )
+
+        foreach( \Nb_Notes\App\Func\TRIGGERS as $trigger )
+        {
             $base_triggers_array[ $trigger ] = []; 
+        }
 
         add_option( 'nb_notes_trigger_templates', $base_triggers_array ); 
     }
@@ -79,5 +83,28 @@ function nb_activate_triggers(){
 }
 
 add_action( 'nb_notes_activate', 'Nb_Notes\App\Func\nb_activate_triggers' ); 
+
+
+/**
+ * At plugin deactivation, clean things up. 
+ *
+ * @since     1.0.0
+ * @return    void
+ */
+
+function nb_deactivate_triggers(){
+  
+    if( get_option( 'nb_notes_trigger_templates' ) )
+    {
+        
+        delete_option( 'nb_notes_trigger_templates' ); 
+    }
+
+}
+
+add_action( 'nb_notes_deactivate', 'Nb_Notes\App\Func\nb_deactivate_triggers' ); 
+
+
+
 
 ?>
