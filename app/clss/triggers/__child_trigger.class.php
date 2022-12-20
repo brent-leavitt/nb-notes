@@ -24,9 +24,9 @@ if( !class_exists( '' ) ){
 		 *
 		 * @since    1.0.0
 		 * @access   private 
-		 * @var      (type)    $name   (description)
+		 * @var      const    $name   (description)
 		 */
-		private TRIGGER = 'Assignment_Submitted'; 
+		private const TRIGGER = ''; 
 		
 		/**
 		 * (description)

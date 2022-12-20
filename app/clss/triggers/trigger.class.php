@@ -108,7 +108,7 @@ if( !class_exists( 'Trigger' ) ){
 		 */
 		protected function get_templates_ids(){
 			
-			$templates  = get_option( 'nb_notes_templates' ); 
+			$templates  = get_option( 'nb_notes_trigger_templates' ); 
 
 			//sets the array of notification CPT ids, if there be any set.  
 			if( isset(  $templates[ $this::TRIGGER ] ) )

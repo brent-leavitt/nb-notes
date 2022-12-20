@@ -12,7 +12,6 @@ use Nb_Notes\App\Clss\Controller;
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
- 
 
 
 /**

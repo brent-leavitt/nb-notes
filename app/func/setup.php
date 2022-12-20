@@ -15,8 +15,6 @@ use Doula_Course\App\Clss\Post_Types;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-
-
 /**
  * Let's register the Notifications CPT 
  *
@@ -25,7 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  */
 function register_notifications()
 {
-
 	$note_args = [
 		'post_type' => 'notification', 	//
 		'description' => 'Templated notifications used to communicate with the students.', 		//
@@ -39,13 +36,10 @@ function register_notifications()
 	];
 
     $type = new Post_Types( $note_args );
-    $results[] = register_post_type( $type->get_name(), $type->get_args() );
-		
+    $results[] = register_post_type( $type->get_name(), $type->get_args() );		
 }
 
 add_action( 'init', 'Nb_Notes\App\Func\register_notifications' ); 
-
-
 
 
 /**
@@ -67,28 +61,15 @@ function admin_meta_boxes(){
 		remove_meta_box('postcustom', 'notification', 'normal');
 		
 		//Remove third-party metaboxes
-		remove_meta_box('_kad_classic_meta_control', 'notification', 'side');
-		
+		//remove_meta_box('_kad_classic_meta_control', 'notification', 'side');
 		
 		//Add additional metaboxes
-		add_meta_box( 'note-details-div', __( 'Notification Details' ), 'Nb_Notes\App\Func\note_details_callback' , 'notification', 'side', 'default' );
-		/*add_meta_box( 'asmt-rubric-div', __( 'Rubric' ), 'Doula_Course\App\Func\asmt_rubric_callback' , 'assignment', 'side', 'default' );
-		add_meta_box( 'asmt-student-div', __( 'Student Details' ), 'Doula_Course\App\Func\asmt_student_callback' , 'assignment', 'side', 'default' );
-		add_meta_box( 'asmt-atch-div', __( 'Attachments' ), 'Doula_Course\App\Func\asmt_atch_callback' , 'assignment', 'side', 'low' );
-		add_meta_box( 'asmt-content-div', __( 'Assessment' ), 'Doula_Course\App\Func\asmt_content_callback' , 'assignment', 'normal', 'low' ); */
-			
+		add_meta_box( 'note-details-div', __( 'Notification Details' ), 'Nb_Notes\App\Func\note_details_callback' , 'notification', 'side', 'default' );	
 	}
-	
-	
-
 }
 
 if( is_admin() )
 	add_action( 'add_meta_boxes', 'Nb_Notes\App\Func\admin_meta_boxes' );
-
-
-
-
 
 
 /**
@@ -100,37 +81,38 @@ if( is_admin() )
  */
 function note_details_callback( $post ){
 	
-	//Load and Link Triggers from Options Table in database. 
-    $triggers = get_option( 'nb_notes_trigger_templates' ); 
+    //Assign a trigger.
+	echo __('A trigger may be set to connect to this notificaiton.', 'nb-notes'); 
+	echo build_triggers_dropdown( $post->ID );
+    
+    //display available shortcodes from trigger, maybe?  
 
-    echo __('A trigger may be set to connect to this notificaiton.', 'nb-notes'); 
-	
-	echo build_triggers_dropdown( $triggers, $post->ID );
-	
+    //Assign a template.
+    
+    //Maybe assign output format: HTML or Plain or is this determined by the assigned template? Could be. 
+
 }
-	
-	
 	
 
 /**
  * Builds the triggeres dropdown menu from the Notification Details metabox in the Notification Temlpates CPT. 
  *
  * @since     1.0.0
- * @param     array     $triggers       //
  * @param     int       $post_id        //
  * @return    string    
  */
 	 
-function build_triggers_dropdown( array $triggers, int $post_id = 0 ) {	
+function build_triggers_dropdown( int $post_id = 0 ) {	
 	
+    //Load and Link Triggers from Options Table in database. 
+    $triggers = get_option( 'nb_notes_trigger_templates' ); 
+
     $assigned_trigger = search_for_post_in_triggers( $post_id, $triggers ); 
 
 	$output = '<p><select name="nb_notes_trigger_templates" id="nb_notes_trigger_templates">';
 			
     //If there is no course ID then the default message should be displayed. 
-    $output .= ( empty( $assigned_trigger ) )? 
-        '<option selected> -- trigger not set -- </option>' : 
-        ''; 
+    $output .= '<option value=""> -- trigger not set -- </option>';
         
     foreach( array_keys( $triggers ) as $trigger )
     {
@@ -139,21 +121,23 @@ function build_triggers_dropdown( array $triggers, int $post_id = 0 ) {
         $output .= '>'.  str_replace( '_', ' ', $trigger ) .'</option>'; 		
     } 
 
-	$output .= '</select><span class="result"></span></p>';	
+	$output .= '</select></p>';	
 	
 	//Display other templates assigned to the trigger. 
 	if( !empty( $assigned_trigger ) && !empty( $assigned_templates = $triggers[ $assigned_trigger ] ) )
     {
-        $output .= "<p>The following template(s) are assigned to this trigger:</p> <ul>";
-
+        $output1 = ''; 
         foreach( $assigned_templates as $tmpl_id )
         {
-            $tmpl = get_post( $tmpl_id );
-            $ouput .= "<li><a href='/wp-admin/post.php?action=edit&post=". $tmpl->ID."'> $tmpl->post_title </a></li>"; 
+           if( $tmpl_id !== $post_id )
+           {
+                $tmpl = get_post( $tmpl_id );
+                $output1 .= "<li><a href='/wp-admin/post.php?action=edit&post=". $tmpl->ID."'> $tmpl->post_title </a></li>"; 
+           }
+           
         }
-
-        $output .= "</ul>";
-
+        if( !empty( $output1 ) )
+            $output .= "<p>The following template(s) are already assigned to this trigger:</p><ul>". $output1 ."</ul>";
     }
 	
 	return $output;
@@ -170,13 +154,14 @@ function build_triggers_dropdown( array $triggers, int $post_id = 0 ) {
  */
 	 
 
-function save_assigned_trigger( $post_id ) {			
+function save_assigned_template_to_trigger( $post_id ) {			
 	global $post;
 	
+    //Check user permissions
+    if ( !current_user_can( 'edit_post',  $post_id ) ) return false;
+
 	// Make sure that it is set.
 	if ( ! isset( $_POST['nb_notes_trigger_templates'] ) ) return;
-	
-	$update = false; 
 	
 	//Load what is needed to assess whether a new trigger assignment has been made.  
 	$triggers = get_option( 'nb_notes_trigger_templates' );
@@ -191,28 +176,22 @@ function save_assigned_trigger( $post_id ) {
     if( empty( $assigned_trigger ) && !empty( $submitted_trigger ) )
     {
         //Add Trigger
-        $trigger[ $submitted_trigger ][] = $post_id;
+        $triggers = add_template_to_trigger( $post_id, $submitted_trigger, $triggers );
         $update = true;
     }
     //else if assigned trigger is not empty, and submitted trigger is empty, remove assignment
     elseif( !empty( $assigned_trigger ) && empty( $submitted_trigger ) )
     {   
         //Remove Trigger
-        foreach( $triggers as $trigger => $trig_arr  )
-        {
-            foreach( array_keys( $trig_array, $post_id, true ) as $key )
-            {
-                unset( $triggers[ $trigger ][ $key ] );
-            }
-        }
-       
+        $triggers = remove_template_from_trigger( $post_id, $triggers ); 
         $update = true;
     }
-    //else if assigned trigger is not empty, and a new assignment is made remove from old trigger and assign to new trigger.
-    elseif( !empty( $assigned_trigger ) && !empty( $submitted_trigger )  )
+    //else if submitted trigger is not empty, and a new assignment is made, remove from old trigger and assign to new trigger.
+    elseif( !empty( $submitted_trigger ) && ( strcmp( $assigned_trigger, $submitted_trigger ) !== 0 )  )
     {
         //Remove, then add Trigger. 
-
+        $triggers = remove_template_from_trigger( $post_id, $triggers ); 
+        $triggers = add_template_to_trigger( $post_id, $submitted_trigger, $triggers );
         $update = true;
     }
             
@@ -221,12 +200,12 @@ function save_assigned_trigger( $post_id ) {
 
 }
 
-add_action( 'save_post', 'Nb_Notes\App\Func\save_assigned_trigger' );
+add_action( 'save_post', 'Nb_Notes\App\Func\save_assigned_template_to_trigger' );
 
 
 
 /**
- * Searches for a post within the triggers. . 
+ * Searches for a post within the triggers. 
  *
  * @since     1.0.0
  * @param     int       $post_id        //
@@ -250,4 +229,48 @@ function search_for_post_in_triggers( $post_id, $triggers )
     return false; 
 }
 
+
+/**
+ * Adds a notification template ID to an assigned trigger. 
+ *
+ * @since     1.0.0
+ * @param     int       $post_id        //ID of the notification template
+ * @param     string    $target         //the target triggger to be updated. 
+ * @param     array     $triggers       //nested array of triggers and their post_ids
+ * @return    array   
+ */ 
+ 
+ function add_template_to_trigger( $post_id, $target, $triggers )
+ {
+     
+     if( !in_array( $post_id, $triggers[ $target ] ) )
+         $triggers[ $target ][] = $post_id;
+ 
+     return $triggers; 
+ }
+
+
+/**
+ * Removes notification template ID within a trigger. 
+ *
+ * @since     1.0.0
+ * @param     int       $post_id        //
+ * @param     array     $triggers       //nested array of triggers and their post_ids
+ * @return    array   
+ */
+	
+ function remove_template_from_trigger( $post_id, $triggers )
+ {
+ 
+    foreach( $triggers as $trigger => $trig_arr  )
+     {
+        foreach( array_keys( $trig_arr, $post_id, true ) as $key )
+        {
+             unset( $triggers[ $trigger ][ $key ] );
+        }
+     }
+     
+     return $triggers; 
+ }
+ 
 ?>

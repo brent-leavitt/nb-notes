@@ -172,36 +172,6 @@ class Nb_Notes {
 
 	
 	/**
-	 * Activate the plugin
-	 *
-	 * @since     1.0.0
-	 * @return    void
-	 */
-	public function activate() {
-		
-		Nb_Notes_Activator::activate(); 
-		do_action( 'nb_notes_activate' );
-
-	}
-
-
-	
-	/**
-	 * Runs on plugin Deactivation
-	 *
-	 * @since     1.0.0
-	 * @return    void
-	 */
-	public function deactivate() {
-		
-		Nb_Notes_Deactivator::deactivate(); 
-		do_action( 'nb_notes_deactivate' );
-
-	}
-
-
-	
-	/**
 	 *	This loads all classes, as needed, automatically! Slick!
 	 *
 	 * @since     1.0.0
