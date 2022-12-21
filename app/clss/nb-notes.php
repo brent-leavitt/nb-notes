@@ -205,6 +205,8 @@ class Nb_Notes {
 			'actions',
 			'setup',
 			'triggers',
+			'listeners',
+			'hooks_test',
 			//''
 
 		]; 
@@ -215,7 +217,7 @@ class Nb_Notes {
 			$path = NB_NOTES_PATH. $path .'.php';
 			
 			if( file_exists( $path ) )
-				require $path;
+				require_once $path;
 			
 		}
 	} 

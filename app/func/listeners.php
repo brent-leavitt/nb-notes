@@ -13,9 +13,13 @@ Namespace Nb_Notes\App\Func;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
+
 /**
- * Creates action hooks for the different assignment CPT statuses except for draft status. 
+ * Creates action hook for trainer reassignment 
  *
+ *  REFERENCE: do_action( 'profile_update', int $user_id, WP_User $old_user_data, array $userdata )
+ *  // Fires immediately after an existing user is updated.
+ * 
  * @since     1.0.0
  * @param     int       $post_id 
  * @param     object    $post
@@ -23,46 +27,42 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * @return    void
  */
 
-function add_assignment_listeners( $post_id, $post, $update )
+function add_student_trainer_update_listener( $user_id, $old_user_data, $userdata )
 {
-    //Only dealing with assignment CPTs. 
-    if( strcmp( $post->post_type, 'assignment' ) !== 0  ) return; 
-    
-    //Don't run the do_action when post status is still in draft state. 
-    if( strcmp( $post->post_status, 'draft' ) !== 0  )
-        do_action( "nb_assignment_{$post->post_status}", $post_id, $post );
+    //If new trainer is different than old trainer. 
+    $old_trainer = $old_user_data->data[ 'student_trainer' ]; 
+    $new_trainer = $userdata[ 'student_trainer' ]; 
+   
+    //if no change, abort.
+    if( strcmp( $old_trainer, $new_trainer ) == 0 ) return;
 
-} 
-
-add_action( 'save_post_assignment', 'Nb_Notes\App\Func\add_assignment_listeners', 10, 3 ); 
-
-/*
-    do_action( 'profile_update', int $user_id, WP_User $old_user_data, array $userdata )
-
-        Fires immediately after an existing user is updated.
-
-    do_action( 'user_register', int $user_id, array $userdata )
-
-        Fires immediately after a new user is registered.
-*/ 
-
-/**
- * Creates action hooks for user profile updates. 
- *
- * @since     1.0.0
- * @param     int       $post_id 
- * @param     object    $post
- * @param     bool      $update
- * @return    void
- */
-
-function add_student_update_listeners( $user_id, $old_user_data, $userdata )
-{
-    //STOPPED HERE.
-
+    do_action( 'nb_trainer_reassignment', $user_id, $old_trainer, $new_trainer, $userdata ); 
 }
 
+add_action( 'profile_update', 'Nb_Notes\App\Func\add_student_trainer_update_listener', 10, 3 ); 
 
-add_action( 'profile_update', 'Nb_Notes\App\Func\add_student_update_listeners', 10, 3 ); 
+
+/**
+ * Creates action hook for new student trainer assignment
+ *
+ * REFERENCE:  do_action( 'user_register', int $user_id, array $userdata )
+ * //  Fires immediately after a new user is registered.
+ *
+ * @since     1.0.0
+ * @param     int       $post_id 
+ * @param     object    $post
+ * @param     bool      $update
+ * @return    void
+ */
+
+function add_trainer_new_student_listener( $user_id, $userdata )
+{
+   //if no trainer has been assigned, abort.
+    if( empty( $trainer = $userdata->data[ 'student_trainer' ] ) ) return;
+
+    do_action( 'nb_trainer_new_student', $user_id, $trainer, $userdata ); 
+}
+
+add_action( 'user_register', 'Nb_Notes\App\Func\add_trainer_new_student_listener', 10, 2 ); 
 
 ?>
