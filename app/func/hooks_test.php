@@ -30,8 +30,15 @@ add_action( 'nb_assignment_incomplete', function( $a, $b ){
 }, 10, 2 ); 
 
 //Listening for Trainer Reassignment
-add_action( 'nb_trainer_reassignment', function( $a, $b ){
+add_action( 'nb_trainer_reassignment', function( $a, $b, $c, $d ){
     error_log( 'nb_trainer_reassignment hook has been called in: ' .__FILE__ ); 
+    error_log( sprintf( "The values being passed by the hook are as follows. A: %d, B: %d, C: %d ", $a, $b, $c ). var_export( $d, true ) ); 
+}, 10, 4 ); 
+
+
+//Listening for New Trainer Assignment
+add_action( 'nb_trainer_new_student', function( $a, $b ){
+    error_log( sprintf( "The values for NB_TRAINER_NEW_STUDENT hook are as follows. A: %d, B: %d", $a, $b ) ); 
 }, 10, 2 ); 
 
 
