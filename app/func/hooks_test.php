@@ -41,6 +41,18 @@ add_action( 'nb_trainer_new_student', function( $a, $b ){
     error_log( sprintf( "The values for NB_TRAINER_NEW_STUDENT hook are as follows. A: %d, B: %d", $a, $b ) ); 
 }, 10, 2 ); 
 
+//Listening for New Student Comment
+add_action( 'nb_new_student_comment', function( $a, $b, $c ){
+    error_log(  sprintf( "The values for nb_new_student_comment hook are as follows. A: %d, B: %d, C: %s", $a, $b, var_export( $c, true ) )  ); 
+}, 10, 3 ); 
 
+//Listening for New Trainer Comment
+add_action( 'nb_new_trainer_comment', function( $a, $b, $c, $d ){
+    error_log(  sprintf( "The values for nb_new_trainer_comment hook are as follows. A: %d, B: %d, C: %d, D: %s", $a, $b, $c, var_export( $d, true ) )  ); 
+}, 10, 4 ); 
 
+//Listening for New Student Registration
+add_action( 'nb_new_student_registration', function( $a, $b ){
+    error_log( "Called from nb_new_student_registration hook are as follows. A: %d, B: %s", $a, var_export( $b, true ) ) ); 
+}, 10, 2 ); 
 ?>
