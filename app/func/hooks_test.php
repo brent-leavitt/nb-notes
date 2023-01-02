@@ -53,6 +53,6 @@ add_action( 'nb_new_trainer_comment', function( $a, $b, $c, $d ){
 
 //Listening for New Student Registration
 add_action( 'nb_new_student_registration', function( $a, $b ){
-    error_log( "Called from nb_new_student_registration hook are as follows. A: %d, B: %s", $a, var_export( $b, true ) ) ); 
+    error_log( "Called from nb_new_student_registration hook are as follows. A: %d, B: %s", $a, var_export( $b, true )  ); 
 }, 10, 2 ); 
 ?>
