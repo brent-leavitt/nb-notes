@@ -64,7 +64,8 @@ function admin_meta_boxes(){
 		//remove_meta_box('_kad_classic_meta_control', 'notification', 'side');
 		
 		//Add additional metaboxes
-		add_meta_box( 'note-details-div', __( 'Notification Details' ), 'Nb_Notes\App\Func\note_details_callback' , 'notification', 'side', 'default' );	
+		add_meta_box( 'automated-triggers-div', __( 'Automated Triggers' ), 'Nb_Notes\App\Func\automated_triggers_metabox_callback' , 'notification', 'side', 'default' ); 	
+		add_meta_box( 'available-shortcodes-div', __( 'Available Shortcodes' ), 'Nb_Notes\App\Func\available_shortcodes_callback' , 'notification', 'side', 'default' ); 	
 	}
 }
 
@@ -73,13 +74,13 @@ if( is_admin() )
 
 
 /**
- * fires a notification to be processed
+ * Metabox that allows a trigger to be linked to a notification template
  *
  * @since     1.0.0
  * @param     object    $post     //
  * @return    void    
  */
-function note_details_callback( $post ){
+function automated_triggers_metabox_callback( $post ){
 	
     //Assign a trigger.
 	echo __('A trigger may be set to connect to this notificaiton.', 'nb-notes'); 
@@ -91,6 +92,24 @@ function note_details_callback( $post ){
     
     //Maybe assign output format: HTML or Plain or is this determined by the assigned template? Could be. 
 
+}
+	
+
+
+/**
+ * Metabox that displays all shortcodes available for the notificaiton template. This changes based on selected trigger
+ *
+ * @since     1.0.0
+ * @param     object    $post     //
+ * @return    void    
+ */
+function available_shortcodes_callback( $post ){
+	
+    //Assign a trigger.
+	echo __('The following shortcodes are available for use in this template. Shortcodes may change based on the selected trigger. Hover over shortcode for usage and description.', 'nb-notes'); 
+	echo __('(Coming Soon)', 'nb-notes'); 
+	//echo build_available_shortcodes( $post->ID );
+ 
 }
 	
 

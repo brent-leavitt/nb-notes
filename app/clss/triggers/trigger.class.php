@@ -198,8 +198,9 @@ if( !class_exists( 'Trigger' ) ){
 		 protected function send( $builder, $params, $html )
 		 {
 			 $sender_id = 0; //system generated 
-			 $sent = notifiy( $this->receiver_id, $sender_id, $builder, $params, $html ); 
-			 //Could process this further to back up or make more redundant.
+			 $controller = new Controller( $this->receiver_id, $sender_id, $builder, $params, $html ); 
+			 return $controller->go(); 		 
+
 		 }
 	 
  

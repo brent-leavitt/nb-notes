@@ -178,7 +178,7 @@ if( !class_exists( 'Sender' ) ){
 		 * @since     1.0.0
 		 * @return    bool //returns true or false based on wp_mail response. 
 		 */	 
-		public function do_send()
+		private function do_send()
 		{
 
 			return wp_mail( $this->recipient_email, 
