@@ -171,9 +171,15 @@ if( !class_exists( 'Controller' ) ){
 		private function init() {
 
 			//Build notification
-			$this->builder 		= new $slug(); 
-			$this->sender 		= new Sender(); 
-			$this->recorder 	= new Recorder(); 
+			$this->builder = new $slug();
+			
+			//if notification requires email. 
+			
+			if( $this->builder->is_email() ) 
+				$this->sender = new Sender(); 
+
+			//Setup notification recorder. 
+			$this->recorder = new Recorder(); 
 			
 		}	
 
