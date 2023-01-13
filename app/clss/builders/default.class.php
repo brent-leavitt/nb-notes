@@ -5,7 +5,7 @@ Namespace Nb_Notes\App\Clss\Builder;
 
 
 /**
- * This is the abstract builder class for building content to be sent in notices. 
+ * This is the default class for builders. This will be loaded if no other builder is set. 
  *
  * @since      1.0.0
  * @package    Nb_Notes
@@ -16,39 +16,22 @@ Namespace Nb_Notes\App\Clss\Builder;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Builder' ) ){ 
-	class Builder implements Builder_Interface { 
+if( !class_exists( 'Default' ) ){ 
+	class Default extends Builder { 
 
 		//Props
 
 		/**
-		 * The body of the notification to be sent. 
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      string
+		 * Parent Class has: 
+		 *	
+		 * private $content; //string
+		 * private $subject; //string
+		 * private $is_email = true; //bool
+		 * 
+		 * 
 		 */
-		private $content; 
 		
 		
-		/**
-		 * The title of the notification to be sent.
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      string
-		 */
-		private $subject; 
-		
-		
-		/**
-		 * Whether or not this notification requires an email to be sent. 
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      (type)    $name   (description)
-		 */
-		private $is_email = true; 
 		
 		
 		/**
@@ -56,7 +39,7 @@ if( !class_exists( 'Builder' ) ){
 		 *
 		 * @since    1.0.0
 		 * @access   private 
-		 * @var      (type)    $name   (description)
+		 * @var      (type) (description)
 		 */
 		private $; 
 		
@@ -64,6 +47,20 @@ if( !class_exists( 'Builder' ) ){
 
 		
 		//Methods
+
+
+		/**
+		 * Parent Class has: 
+		 *	
+		 * public __construct() 	//(empty)
+		 * public init() 			//(empty)
+		 * private set_() 			//(empty)
+		 * private get_() 			//(empty)
+		 * public get_subject() 	//(string)
+		 * public get_content() 	//(string)
+		 * public is_email() 		//(bool)
+		 */
+
 
 		/**
 		 * (description)
@@ -77,8 +74,28 @@ if( !class_exists( 'Builder' ) ){
 				
 				
 		}
-		
+				
+		/**
+		 * Builds out the parameters required for this type of email.
+		 *
+		 * @since     1.0.0
+		 * @param     array 	$params 	
+		 * @return    (type)    (description)
+		 */	 
+		public function build( array $params )
+		{
+			//What parameters are being sent to the builder? 
 
+			//What actions need to be performed: 
+				//build out the content of the notification
+				$this->content = 'Temp holder for notification content. This is where the bulk of the message goes.'; 
+				
+				//build out the subject line of the notification
+				$this->subject = "Temp Messsage Subject - New Beginnings Doula Training";
+			
+		
+		}
+		
 		/**
 		 * (description)
 		 *
@@ -168,6 +185,9 @@ if( !class_exists( 'Builder' ) ){
 			return $this->is_email; 
 		
 		}
+
+
+		
 
 
 		

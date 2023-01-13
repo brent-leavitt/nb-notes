@@ -15,7 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 /**
- * fires a notification to be processed
+ * fires a notification to be processed. This is a helper function to allow outside functions to access the nb-notes controller class and subsequent actions.
+ * 
  *
  * @since     1.0.0
  * @param     bool    $receiver_id      //who receives the notification

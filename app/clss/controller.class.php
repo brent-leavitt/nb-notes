@@ -1,7 +1,7 @@
 <?php 
 
 Namespace Nb_Notes\App\Clss;
-//use ; 
+ 
 
 
 /**
@@ -156,9 +156,7 @@ if( !class_exists( 'Controller' ) ){
 		 */	 
 		public function set( $name, $val)
 		{
-
 			$this->$name = $val; 
-		
 		}
 
 
@@ -171,10 +169,10 @@ if( !class_exists( 'Controller' ) ){
 		private function init() {
 
 			//Build notification
-			$this->builder = new $slug();
-			
-			//if notification requires email. 
-			
+			$builder_slug = 'builders\\'. $slug;
+			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug() : new builders\Default();
+	
+			//if notification requires email.		
 			if( $this->builder->is_email() ) 
 				$this->sender = new Sender(); 
 

@@ -45,11 +45,14 @@ const TRIGGERS = [
  * @return    void
  */
 
-function nb_make_triggers_listen( $triggers )
+function make_triggers_listen( $triggers )
 {
 
         foreach( $triggers as $t )
         {
+            $t = "Nb_Notes\App\Clss\Triggers\\". $t; 
+            if( !class_exists( $t ) ) continue;
+
             $trigger = new $t();
             $trigger->listen(); 
         }
@@ -104,7 +107,8 @@ function nb_deactivate_triggers(){
 
 add_action( 'nb_notes_deactivate', 'Nb_Notes\App\Func\nb_deactivate_triggers' ); 
 
-
+//Kick off the party here: 
+make_triggers_listen( TRIGGERS ); 
 
 
 ?>

@@ -1,6 +1,7 @@
 <?php
 
 Namespace Nb_Notes\App\Clss;
+
 /**
  * The core plugin class.
  *
@@ -186,10 +187,11 @@ class Nb_Notes {
 			$path = str_replace( 'nb_notes/', '', $path );				
 			$path = str_replace( '_', '-', $path );				
 			$path = NB_NOTES_PATH. $path . '.class.php';
-
-			if( file_exists( $path ) )
-				require $path;
 			
+			if( file_exists( $path ) )
+			{
+				require $path;
+			}
 		} );
 	} 	
 	/**
@@ -217,8 +219,7 @@ class Nb_Notes {
 			$path = NB_NOTES_PATH. $path .'.php';
 			
 			if( file_exists( $path ) )
-				require_once $path;
-			
+				require_once $path;	
 		}
 	} 
 

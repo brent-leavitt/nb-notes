@@ -173,7 +173,7 @@ if( !class_exists( 'Sender' ) ){
 		
 		
 		/**
-		 * Hooking into WordPress mailer functionality. 
+		 * Hooking into WordPress mailer functionality. Logs error on failed send. 
 		 *
 		 * @since     1.0.0
 		 * @return    bool //returns true or false based on wp_mail response. 
@@ -181,11 +181,25 @@ if( !class_exists( 'Sender' ) ){
 		private function do_send()
 		{
 
-			return wp_mail( $this->recipient_email, 
+			$sent = wp_mail( $this->recipient_email, 
 							$this->subject, 
 							$this->content, 
 							$this->headers, 
 							$this->attach ); 
+
+			if( !$sent )
+			{
+				$message = "Error: Email not sent. The folowing parameters were passed. /n
+				 Recipient_Email: {$this->recipient_email} /n
+				 Subject: {$this->subject} /n
+				 Content: {$this->content} /n
+				 Headers: {$this->headers} /n
+				 Attachments: {$this->attach} "; 
+
+				error_log( $message ); 
+			}			
+
+			return $sent; 
 		
 		}
 		

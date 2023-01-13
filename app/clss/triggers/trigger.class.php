@@ -78,7 +78,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @access   protected 
 		 * @var      (type)    $name   (description)
 		 */
-		protected $; 
+		//protected $_; 
 		
 		
 

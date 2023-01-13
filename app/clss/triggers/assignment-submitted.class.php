@@ -35,7 +35,7 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
-		private $; 
+		private $_; 
 		
 		
 		//Then Methods
