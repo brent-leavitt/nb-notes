@@ -23,10 +23,10 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 * (description)
 		 *
 		 * @since    1.0.0
-		 * @access   private 
+		 * @access   protected 
 		 * @var      string    TRIGGER   (description)
 		 */
-		private const TRIGGER = 'Assignment_Submitted'; 
+		protected const TRIGGER = 'Assignment_Submitted'; 
 		
 		/**
 		 * (description)
@@ -63,9 +63,7 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 */	 
 		public function listen()
 		{
-
-			add_action( 'nb_assignement_submitted', [ $this, 'init' ] ); 
-		
+			add_action( 'nb_assignment_submitted', [ $this, 'init' ], 10, 2 ); 
 		}
 
 				
@@ -74,13 +72,14 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 * Initializes and executes the action hook //NEEDS WORK BECAUSE IT NEEDS TO LISTEN TO THE INCOMING PARAMATERS. 
 		 *
 		 * @since     1.0.0
-		 * @param     array ...$args
+		 * @param     array ...$args  [0] => $post_id, [1] => $post_obj
 		 * @return    void
 		 */
 
 		public function init( ...$args ) {
 
 			//This is where the incoming parameter data is received. 
+			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 
 			//pull the trigger. 
 			$this->fire(); 

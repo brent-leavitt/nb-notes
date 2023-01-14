@@ -1,7 +1,7 @@
 <?php 
 
 Namespace Nb_Notes\App\Clss\Triggers;
-//use ; 
+use Nb_Notes\App\Clss\Controller; 
 
 
 /**
@@ -18,25 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  
 if( !class_exists( 'Trigger' ) ){ 
 	abstract class Trigger implements Trigger_Interface { 
-
-		/**
-		 * Who is this email being sent to?
-		 *
-		 * @since    1.0.0
-		 * @access   protected 
-		 * @var      int    
-		 */
-		protected $receiver_id; 
-		
-		
-		/**
-		 * Who is sending the email? 
-		 *
-		 * @since    1.0.0
-		 * @access   protected 
-		 * @var      int 
-		 */
-		protected $sender_id; 
 		
 		
 		/**
@@ -106,7 +87,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @since     1.0.0
 		 * @return    void
 		 */
-		protected function get_templates_ids(){
+		protected function get_template_ids(){
 			
 			$templates  = get_option( 'nb_notes_trigger_templates' ); 
 
@@ -126,12 +107,10 @@ if( !class_exists( 'Trigger' ) ){
 		protected function fire()
 		{
 
+			error_log( "The trigger::fire() method has been called. " ); 
 			//get notification templates as created by the admins in the Notification CPT and stored in the Options array. 
 			$this->get_template_ids(); 
-		
-			//Process incoming parameters. //NOT SURE IF NEEDED. 
-			$this->prepare_params(); 
-
+	
 			//Connects everythign together and sends it on it way.  
 			$this->connect(); 
 
@@ -146,7 +125,6 @@ if( !class_exists( 'Trigger' ) ){
 		 */	 
 		protected function connect()
 		{
-			
 			//If there are templates available
 			if( !empty( $this->templates ) )
 			{
@@ -156,8 +134,11 @@ if( !class_exists( 'Trigger' ) ){
 					$template = get_post( $tmpl_id ); 
 					
 					//assigns meta data from the post (which functionality has not been created yet); 
-					$builder 	= $template->nb_note_template_params[ 'builder' ];
-					$html 		= $template->nb_note_template_params[ 'html' ]; 
+					$builder 	= $template->nb_note_template_params[ 'builder' ] ?? NULL;
+					$html 		= $template->nb_note_template_params[ 'html' ] ?? true; 			
+					$receiver	= $template->nb_note_template_params[ 'receiver' ] ?? 'student';	//This can be sepecified with the notificaiton template. 
+					$sender		= $template->nb_note_template_params[ 'sender' ] ?? 0; 				//This can also be specified with the notification template. 
+
 
 					//Content from template needs to be taken in. 
 					//parameters from Action hook need to be assigned. 
@@ -167,18 +148,20 @@ if( !class_exists( 'Trigger' ) ){
 						'content' 	=> $template->post_content,
 						'subject' 	=> $template->post_title,
 						'args' 		=> $this->args
-
 					];
 
-					$this->send( $builder, $params, $html );
+					$this->send(  $receiver_id, $builder, $params, $html, $sender_id );
 				}
 			}
 			else
 			{	//if not template is available, maybe have system default.
 				//load a default template for this hook. Has (some variables) $content pre-defined. 
-				include( NB_NOTES_PATH. 'app/tmpl/email/defaults/' . $this::TRIGGER .'.tmpl.php' ); 
+				include( NB_NOTES_PATH. 'app/tmpl/email/defaults/' . strtolower( $this::TRIGGER ) .'.tmpl.php' ); 
 				
-				$this->send( $builder, $params, $html );
+				//May need to set inside of a foreach loop. 
+				foreach( $templates as $tmpl )
+					$this->send( $tmpl[ 'receiver' ],  $tmpl[ 'builder' ], $tmpl[ 'params' ], $tmpl[ 'html' ], $tmpl[ 'sender' ] );
+		
 			}
 		
 		}
@@ -189,17 +172,26 @@ if( !class_exists( 'Trigger' ) ){
 		 * The final action to be taken by any trigger 
 		 *
 		 * @since     1.0.0
+		 * @param     int 		$receiver_id
 		 * @param     string 	$builder
 		 * @param     array 	$params
-		 * @param     bool 		$html
+		 * @param     bool 		$html 		//default is true
+		 * @param     string 	$sender_id 	//default is 0 for system. 
 		 * @return    void
 		 */	 
 
-		 protected function send( $builder, $params, $html )
+		 protected function send( $receiver_id, $builder, $params, $html = true, $sender_id = 0 )
 		 {
-			 $sender_id = 0; //system generated 
-			 $controller = new Controller( $this->receiver_id, $sender_id, $builder, $params, $html ); 
-			 return $controller->go(); 		 
+			 error_log( 'The send method from the trigger abstract class has been called. These are the parameters being sent: 
+			 	RECEIVER_ID: '.$receiver_id .'
+			 	BUILDER: '.$builder .'
+			 	PARAMS: '. var_export( $params , true ) .'
+			 	HTML: '.$html .'
+			 	SENDER ID: '.$sender_id 
+			);
+
+			$controller = new Controller( $receiver_id, $sender_id, $builder, $params, $html ); 
+			return $controller->go(); 		 
 
 		 }
 	 
