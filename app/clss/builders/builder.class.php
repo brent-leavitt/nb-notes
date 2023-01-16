@@ -1,6 +1,6 @@
 <?php 
 
-Namespace Nb_Notes\App\Clss\Builder;
+Namespace Nb_Notes\App\Clss\Builders;
 //use ; 
 
 
@@ -9,7 +9,7 @@ Namespace Nb_Notes\App\Clss\Builder;
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/App/Clss/Builder/
+ * @subpackage Nb_Notes/App/Clss/Builders/
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
 
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
 if( !class_exists( 'Builder' ) ){ 
-	class Builder implements Builder_Interface { 
+	abstract class Builder implements Builder_Interface { 
 
 		//Props
 
@@ -48,7 +48,7 @@ if( !class_exists( 'Builder' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
-		private $is_email = true; 
+		protected $is_email = true; 
 		
 		
 		/**
@@ -58,7 +58,7 @@ if( !class_exists( 'Builder' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
-		private $; 
+		private $_; 
 		
 		
 

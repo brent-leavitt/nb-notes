@@ -26,7 +26,7 @@ if( !class_exists( 'Recorder' ) ){
 		 * @access   private 
 		 * @var      object
 		 */
-		private $db 
+		private $db;
 		
 
 		/**
@@ -36,7 +36,7 @@ if( !class_exists( 'Recorder' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
-		private $; 
+		private $_; 
 		
 		
 
@@ -102,6 +102,20 @@ if( !class_exists( 'Recorder' ) ){
 
 		
 		
+		/**
+		 * (description)
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */	 
+		public function record( $package, $sent )
+		{
+
+			
+		
+		}
+
 		/**
 		 * (description)
 		 *

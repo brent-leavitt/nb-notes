@@ -1,6 +1,6 @@
 <?php 
 
-Namespace Nb_Notes\App\Clss\Builder;
+Namespace Nb_Notes\App\Clss\Builders;
 //use ; 
 
 
@@ -9,15 +9,15 @@ Namespace Nb_Notes\App\Clss\Builder;
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/App/Clss/Builder/
+ * @subpackage Nb_Notes/App/Clss/Builders/
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Default' ) ){ 
-	class Default extends Builder { 
+if( !class_exists( 'Generic' ) ){ 
+	class Generic extends Builder { 
 
 		//Props
 
@@ -41,7 +41,7 @@ if( !class_exists( 'Default' ) ){
 		 * @access   private 
 		 * @var      (type) (description)
 		 */
-		private $; 
+		private $_; 
 		
 		
 

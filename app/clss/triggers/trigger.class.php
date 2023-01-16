@@ -1,7 +1,7 @@
 <?php 
 
-Namespace Nb_Notes\App\Clss\Triggers;
-use Nb_Notes\App\Clss\Controller; 
+namespace Nb_Notes\App\Clss\Triggers;
+use Nb_Notes\App\Clss\Director; 
 
 
 /**
@@ -190,8 +190,9 @@ if( !class_exists( 'Trigger' ) ){
 			 	SENDER ID: '.$sender_id 
 			);
 
-			$controller = new Controller( $receiver_id, $sender_id, $builder, $params, $html ); 
-			return $controller->go(); 		 
+			$director = new Director( $receiver_id, $sender_id, $builder, $params, $html ); 
+			
+			return $director->go(); 		 
 
 		 }
 	 

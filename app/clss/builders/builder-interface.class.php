@@ -1,6 +1,6 @@
 <?php 
 
-Namespace Nb_Notes\App\Clss\Builder;
+Namespace Nb_Notes\App\Clss\Builders;
 //use ; 
 
 
@@ -9,7 +9,7 @@ Namespace Nb_Notes\App\Clss\Builder;
  *
  * @since      1.0.0
  * @package    Nb_Notes
- * @subpackage Nb_Notes/App/Clss/Builder/
+ * @subpackage Nb_Notes/App/Clss/Builders/
  * @author     Brent Leavitt <brent@trainingdoulias.com>
  */
 
@@ -28,7 +28,7 @@ if( !interface_exists( 'Builder_Interface' ) ){
 		 * @since     1.0.0
 		 * @return    void
 		 */
-		public function build();
+		public function build( array $params );
 
 
 		/**

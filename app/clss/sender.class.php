@@ -26,7 +26,7 @@ if( !class_exists( 'Sender' ) ){
 		 * @access   private 
 		 * @var      string    
 		 */
-		private $recipient_email; 
+		private $receiver_email; 
 		
 	
 		/**
@@ -133,8 +133,8 @@ if( !class_exists( 'Sender' ) ){
 		private function unpack( $package )
 		{
 			
-			$this->recipient_email	= $package[ 'recipient_email' ]; 
-			$this->sender_email 	= $package[ 'sender_email' ]; 
+			$this->receiver_email	= $package[ 'receiver' ]; 
+			$this->sender_email 	= $package[ 'sender' ]; 
 			$this->subject 			= $package[ 'subject' ]; 
 			$this->content 			= $package[ 'content' ]; 
 			$this->attach 			= ( !empty( $package[ 'attach' ] ) )? 
@@ -181,7 +181,7 @@ if( !class_exists( 'Sender' ) ){
 		private function do_send()
 		{
 
-			$sent = wp_mail( $this->recipient_email, 
+			$sent = wp_mail( $this->receiver_email, 
 							$this->subject, 
 							$this->content, 
 							$this->headers, 
@@ -189,12 +189,15 @@ if( !class_exists( 'Sender' ) ){
 
 			if( !$sent )
 			{
+				$headers = var_export( $this->headers, true ); 
+				$attach = var_export( $this->attach, true ); 
+
 				$message = "Error: Email not sent. The folowing parameters were passed. /n
-				 Recipient_Email: {$this->recipient_email} /n
+				 Receiver_Email: {$this->receiver_email} /n
 				 Subject: {$this->subject} /n
 				 Content: {$this->content} /n
-				 Headers: {$this->headers} /n
-				 Attachments: {$this->attach} "; 
+				 Headers: {$headers} /n
+				 Attachments: {$attach} "; 
 
 				error_log( $message ); 
 			}			

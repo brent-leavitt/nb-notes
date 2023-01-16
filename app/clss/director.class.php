@@ -16,8 +16,8 @@ Namespace Nb_Notes\App\Clss;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Controller' ) ){ 
-	class Controller { 
+if( !class_exists( 'Director' ) ){ 
+	class Director { 
 
 		/**
 		 * builds the content of the messages to be sent
@@ -171,8 +171,8 @@ if( !class_exists( 'Controller' ) ){
 			
 			error_log( 'Called from the Controller::init method in nb_notes plugin.' ); 
 			//Build notification
-			$builder_slug = 'builders\\'. $slug;
-			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug() : new builders\Default();
+			$builder_slug = 'builders\\'. $this->slug;
+			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug() : new builders\Generic();
 	
 			//if notification requires email.		
 			if( $this->builder->is_email() ) 
@@ -204,7 +204,7 @@ if( !class_exists( 'Controller' ) ){
 			$this->recorder->record( $package, $sent ); 
 
 			//Add Admin_Note meta data to student file (if applicable)
-			if( method_exists( $this->builder->get_admin_note() ) &&
+			if( method_exists( $this->builder, 'get_admin_note' ) &&
 				( $admin_note =  $this->builder->get_admin_note() ) )
 				$this->recorder->add_admin_note( $this->receiver_id, $this->sender_id, $admin_note ); 
 			
