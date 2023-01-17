@@ -21,6 +21,33 @@ if( !class_exists( 'Trigger' ) ){
 		
 		
 		/**
+		 * The user ID for the person responsible for launching the trigger. Default is 0 for system. 
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      int
+		 */
+		protected $submitter_id = 0; 
+
+		/**
+		 * The user ID for the person targeted to receive the notificaiton. Default is 0 for system. 
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      int
+		 */
+		protected $target_id = 0; 
+		
+		/**
+		 * The source of the submitted trigger, it could be a student, trainer, admin, or system. Default is system.  
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      string
+		 */
+		protected $source = 'system'; 
+		
+		/**
 		 * Slug of the builder name
 		 *
 		 * @since    1.0.0
@@ -150,7 +177,7 @@ if( !class_exists( 'Trigger' ) ){
 						'args' 		=> $this->args
 					];
 
-					$this->send(  $receiver_id, $builder, $params, $html, $sender_id );
+					$this->send(  $receiver, $sender, $builder, $params, $html );
 				}
 			}
 			else
@@ -160,7 +187,7 @@ if( !class_exists( 'Trigger' ) ){
 				
 				//May need to set inside of a foreach loop. 
 				foreach( $templates as $tmpl )
-					$this->send( $tmpl[ 'receiver' ],  $tmpl[ 'builder' ], $tmpl[ 'params' ], $tmpl[ 'html' ], $tmpl[ 'sender' ] );
+					$this->send( $tmpl[ 'receiver' ], $tmpl[ 'sender' ], $tmpl[ 'builder' ], $tmpl[ 'params' ], $tmpl[ 'html' ],  );
 		
 			}
 		
@@ -180,23 +207,41 @@ if( !class_exists( 'Trigger' ) ){
 		 * @return    void
 		 */	 
 
-		 protected function send( $receiver_id, $builder, $params, $html = true, $sender_id = 0 )
+		 protected function send( $receiver, $sender, $builder, $params, $html = true )
 		 {
 			 error_log( 'The send method from the trigger abstract class has been called. These are the parameters being sent: 
-			 	RECEIVER_ID: '.$receiver_id .'
+			 	RECEIVER: '.$receiver.'
+			 	SENDER: '.$sender .'
 			 	BUILDER: '.$builder .'
 			 	PARAMS: '. var_export( $params , true ) .'
-			 	HTML: '.$html .'
-			 	SENDER ID: '.$sender_id 
+			 	HTML: '.$html 
 			);
 
-			$director = new Director( $receiver_id, $sender_id, $builder, $params, $html ); 
+			$director = new Director( 
+				$this->get_user_id( $receiver ), 
+				$this->get_user_id( $sender ), 
+				$builder, 
+				$params,
+				$html
+			 ); 
 			
 			return $director->go(); 		 
 
 		 }
-	 
  
+				 
+		/**
+		 * If the type of user requested matches the source user type, then return the submitter_id, else the target_id. 
+		 *
+		 * @since     1.0.0
+		 * @param     string 	$user_type
+		 * @return    int		$user_id
+		 */	 
+		public function get_user_id( $user_type ): int
+		{
+			return ( strcmp( $user_type, $this->source ) == 0 )? $this->submitter_id : $this->target_id; 
+		}
+
 				 
 		/**
 		 * (description)

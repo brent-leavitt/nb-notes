@@ -81,6 +81,11 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 			//This is where the incoming parameter data is received. 
 			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 
+			$this->submitter_id = $args[1]->post_author; 
+			
+			//Assuming the source of all submitted assignmen triggers are students, but probably should verify this. 
+			$this->source = 'student'; 
+
 			//pull the trigger. 
 			$this->fire(); 
 		}	
