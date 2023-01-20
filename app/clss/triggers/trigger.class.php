@@ -36,7 +36,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @access   protected 
 		 * @var      int
 		 */
-		protected $target_id = 0; 
+		//protected $target_id = 0; 
 		
 		/**
 		 * The source of the submitted trigger, it could be a student, trainer, admin, or system. Default is system.  
@@ -133,14 +133,11 @@ if( !class_exists( 'Trigger' ) ){
 		 */	 
 		protected function fire()
 		{
-
-			error_log( "The trigger::fire() method has been called. " ); 
 			//get notification templates as created by the admins in the Notification CPT and stored in the Options array. 
 			$this->get_template_ids(); 
 	
-			//Connects everythign together and sends it on it way.  
-			$this->connect(); 
-
+			//Assembles everythign together and sends it on it way.  
+			$this->build(); 
 		}
 	
 
@@ -150,7 +147,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @since     1.0.0
 		 * @return    void
 		 */	 
-		protected function connect()
+		protected function build()
 		{
 			//If there are templates available
 			if( !empty( $this->templates ) )
@@ -158,14 +155,13 @@ if( !class_exists( 'Trigger' ) ){
 				//foreach template ID, load the template, and prepare to send. 
 				foreach( $this->templates as $tmpl_id )
 				{
-					$template = get_post( $tmpl_id ); 
+					$template_params = get_post_meta( $tmpl_id, 'nb_notice_template_params', TRUE ); 
 					
 					//assigns meta data from the post (which functionality has not been created yet); 
-					$builder 	= $template->nb_note_template_params[ 'builder' ] ?? NULL;
-					$html 		= $template->nb_note_template_params[ 'html' ] ?? true; 			
-					$receiver	= $template->nb_note_template_params[ 'receiver' ] ?? 'student';	//This can be sepecified with the notificaiton template. 
-					$sender		= $template->nb_note_template_params[ 'sender' ] ?? 0; 				//This can also be specified with the notification template. 
-
+					$builder 	= $template_params[ 'builder' ] ?? NULL;
+					$html 		= $template_params[ 'html' ] ?? true; 			
+					$receiver	= $template_params[ 'receiver' ] ?? 'student';	//This can be sepecified with the notificaiton template. 
+					$sender		= $template_params[ 'sender' ] ?? 'system'; 		//This can also be specified with the notification template. 
 
 					//Content from template needs to be taken in. 
 					//parameters from Action hook need to be assigned. 
@@ -199,23 +195,29 @@ if( !class_exists( 'Trigger' ) ){
 		 * The final action to be taken by any trigger 
 		 *
 		 * @since     1.0.0
-		 * @param     int 		$receiver_id
+		 * @param     string	$receiver
+		 * @param     string 	$sender 	
 		 * @param     string 	$builder
 		 * @param     array 	$params
 		 * @param     bool 		$html 		//default is true
-		 * @param     string 	$sender_id 	//default is 0 for system. 
 		 * @return    void
 		 */	 
 
 		 protected function send( $receiver, $sender, $builder, $params, $html = true )
-		 {
-			 error_log( 'The send method from the trigger abstract class has been called. These are the parameters being sent: 
+		 {			
+			/* 
+			error_log( 'The send method from the trigger abstract class has been called. These are the parameters being sent: 
 			 	RECEIVER: '.$receiver.'
 			 	SENDER: '.$sender .'
 			 	BUILDER: '.$builder .'
 			 	PARAMS: '. var_export( $params , true ) .'
 			 	HTML: '.$html 
 			);
+			*/
+			/*
+			error_log( "The RECIEVER ID is: ".	$this->get_user_id( $receiver ). "
+				The SENDER ID is: ".	$this->get_user_id( $sender )  ); 
+			*/
 
 			$director = new Director( 
 				$this->get_user_id( $receiver ), 
@@ -232,14 +234,14 @@ if( !class_exists( 'Trigger' ) ){
 				 
 		/**
 		 * If the type of user requested matches the source user type, then return the submitter_id, else the target_id. 
-		 *
+		 * 
 		 * @since     1.0.0
 		 * @param     string 	$user_type
 		 * @return    int		$user_id
 		 */	 
 		public function get_user_id( $user_type ): int
 		{
-			return ( strcmp( $user_type, $this->source ) == 0 )? $this->submitter_id : $this->target_id; 
+			return ( strcmp( $user_type, $this->source ) == 0 )? $this->submitter_id : $this->set_target_id( $user_type ); 
 		}
 
 				 

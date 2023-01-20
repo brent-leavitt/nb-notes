@@ -79,9 +79,11 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		public function init( ...$args ) {
 
 			//This is where the incoming parameter data is received. 
-			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
+			//error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 
-			$this->submitter_id = $args[1]->post_author; 
+			//Define submitter_id, target_id, and source of the trigger. 
+			//Submitter ID will be the student, or author of the post. 
+			$this->submitter_id = $args[1]->post_author;
 			
 			//Assuming the source of all submitted assignmen triggers are students, but probably should verify this. 
 			$this->source = 'student'; 
@@ -103,6 +105,37 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		{
 		
 			
+		}
+		
+		
+		
+		/**
+		 * Returns the targetted receiver's user ID. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */
+		protected function set_target_id( $type )
+		{
+			switch( $type ){
+				//Get "trainer" type from student meta, returns the trainer's ID or 0 if not found. 
+				case "trainer":
+					return  get_user_meta( $this->submitter_id, 'student_trainer', TRUE ) ?? 0 ;
+
+				//Get "admin" type, If this notice is being targetted to the admin set as -1 because there are multiple admins.	
+				case "admin":
+					return -1; 
+				
+				//"student" type, should never be triggered here, but just in case. 	
+				case "student":
+					return $this->submitter_id; 
+
+				//"system" type is default at 0, and hence should not be set here either.	
+				case "system":
+				default:
+					return 0;
+			}
 		}
 		
 

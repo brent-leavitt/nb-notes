@@ -157,7 +157,7 @@ if( !class_exists( 'Sender' ) ){
 			$this->headers[] = ( !empty( $this->sender_email ) )? 'From: '.$this->sender_email : ''; 
 		
 			//Do a little more work if we are sending an HTML formatted email. 
-			if( strcmp( $this->format, 'HTML' ) == 0 )
+			if( strcmp( $this->format, 'html' ) === 0 )
 			{
 				include( NB_NOTES_PATH. '/app/tmpl/email/html_wrapper.php' ); 
 				$this->content = $nb_html_header . $this->content . $nb_html_footer;
@@ -192,7 +192,7 @@ if( !class_exists( 'Sender' ) ){
 				$headers = var_export( $this->headers, true ); 
 				$attach = var_export( $this->attach, true ); 
 
-				$message = "Error: Email not sent. The folowing parameters were passed. /n
+				$message = "ERROR: Email not sent. The folowing parameters were passed. /n
 				 Receiver_Email: {$this->receiver_email} /n
 				 Subject: {$this->subject} /n
 				 Content: {$this->content} /n

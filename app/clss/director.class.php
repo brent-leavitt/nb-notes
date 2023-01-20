@@ -133,9 +133,7 @@ if( !class_exists( 'Director' ) ){
 		 */
 
 		public function __construct(  $receiver_id, $sender_id, $slug, $params, $html )
-		{
-			error_log( 'Called from the constructor in the nb_notes controller class.' ); 
-			
+		{			
 			$this->set( 'receiver_id', $receiver_id );
 			$this->set( 'sender_id', $sender_id );
 			$this->set( 'slug', $slug );
@@ -169,13 +167,16 @@ if( !class_exists( 'Director' ) ){
 		 */
 		private function init() {
 			
-			error_log( 'Called from the Controller::init method in nb_notes plugin.' ); 
 			//Build notification
-			$builder_slug = 'builders\\'. $this->slug;
-			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug() : new builders\Generic();
-	
+			$builder_slug = '\Nb_Notes\App\Clss\Builders\\'. ucfirst( $this->slug );
+			
+			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug : new builders\Generic();
+		
+			
+			error_log( __METHOD__ .':LINE '. __LINE__. ' Builder Class: '. var_export( $this->builder, true ) );
+
 			//if notification requires email.		
-			if( $this->builder->is_email() ) 
+			if( $this->builder->is_email() )  
 				$this->sender = new Sender(); 
 
 			//Setup notification recorder. 

@@ -1,6 +1,6 @@
 <?php 
 
-Namespace Nb_Notes\App\Clss\Builder;
+Namespace Nb_Notes\App\Clss\Builders;
 //use ; 
 
 
@@ -41,7 +41,7 @@ if( !class_exists( 'Assignment' ) ){
 		 * @access   private 
 		 * @var      (type) (description)
 		 */
-		private $; 
+		//private $; 
 		
 		
 
@@ -89,6 +89,27 @@ if( !class_exists( 'Assignment' ) ){
 		
 		}	
 
+						
+		/**
+		 * Builds out the parameters required for this type of email.
+		 *
+		 * @since     1.0.0
+		 * @param     array 	$params 	
+		 * @return    (type)    (description)
+		 */	 
+		public function build( array $params )
+		{
+			//What parameters are being sent to the builder? 
+
+			//What actions need to be performed: 
+				//build out the content of the notification
+				$this->content = 'Temp holder for Assignment type notification content. This is where the bulk of the message goes.'; 
+				
+				//build out the subject line of the notification
+				$this->subject = "Temp Assignment Messsage Subject - New Beginnings Doula Training";
+			
+		
+		}
 		
 		
 		/**
