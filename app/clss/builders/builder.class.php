@@ -25,20 +25,20 @@ if( !class_exists( 'Builder' ) ){
 		 * The body of the notification to be sent. 
 		 *
 		 * @since    1.0.0
-		 * @access   private 
+		 * @access   protected 
 		 * @var      string
 		 */
-		private $content; 
+		protected $content; 
 		
 		
 		/**
 		 * The title of the notification to be sent.
 		 *
 		 * @since    1.0.0
-		 * @access   private 
+		 * @access   protected 
 		 * @var      string
 		 */
-		private $subject; 
+		protected $subject; 
 		
 		
 		/**
@@ -87,12 +87,27 @@ if( !class_exists( 'Builder' ) ){
 		 * @return    (type)    (description)
 		 */
 		public function init() {
-
-			
+	
 		
 		}	
-
 		
+		
+		/**
+		 * Appends the website name to the end of the subject line. 
+		 *
+		 * @since     1.0.0
+		 * 
+		 * @return    VOID
+		 */
+		protected function finalize()
+		{
+			error_log( __METHOD__. ' is called.' ); 
+			//Append Website Name to end of Subject Line
+			$this->subject .= ' - '. get_bloginfo( 'name' ); 
+			
+		}
+		
+
 		
 		/**
 		 * (description)

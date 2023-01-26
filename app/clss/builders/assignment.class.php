@@ -99,16 +99,61 @@ if( !class_exists( 'Assignment' ) ){
 		 */	 
 		public function build( array $params )
 		{
-			//What parameters are being sent to the builder? 
+			//incoming parameters
+			/*
+				- template content
+				- template subject
+				- assignment id
+			*/
 
-			//What actions need to be performed: 
-				//build out the content of the notification
-				$this->content = 'Temp holder for Assignment type notification content. This is where the bulk of the message goes.'; 
-				
-				//build out the subject line of the notification
-				$this->subject = "Temp Assignment Messsage Subject - New Beginnings Doula Training";
+			//process incoming content, run shortcodes on it, then assign to content property. 
+			$this->content = $params[ 'content' ]; //do_shortcode( $params[ 'content' ] ); //I don't think this works.  
+
+			//call and append the assignment receipt.
+			$this->content .= $this->add_receipt( $params[ 'args' ][ 'asmt_id' ] );
+
+			//assign incoming subject to subject property. 
+			$this->subject = $params[ 'subject' ]; 
 			
+			//Finalize the notification to be sent. 
+			$this->finalize(); 
+
+		}
 		
+		
+		/**
+		 * Appends an assignment receipt to the content being generated. 
+		 *
+		 * @since     1.0.0
+		 * @param     int 	$asmt_id
+		 * @return    (type)    (description)
+		 */
+		private function add_receipt( int $asmt_id )
+		{
+			$asmt = get_post( $asmt_id );
+			
+			$course_id = $asmt->post_parent; //
+				
+			$asmt_url = home_url('/?p=').$course_id;
+
+			//build out the receipt
+			return "
+========================
+
+Assignment Name: {$asmt->post_title}
+
+Assignment: 
+{$asmt->post_content}
+
+=======================
+
+Link: {$asmt_url}
+Assignment ID: {$asmt->ID}
+Student ID: {$asmt->post_author}
+Last submitted: {$asmt->post_modified}
+
+=======================";
+			
 		}
 		
 		
