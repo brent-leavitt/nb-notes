@@ -35,6 +35,9 @@ if ( ! defined( 'WPINC' ) ) {
 if( !defined( 'NB_NOTES_VERSION' ) )
 	define( 'NB_NOTES_VERSION', '1.0.0' );
 
+if( !defined( 'NB_NOTES_DB_VERSION' ) )
+	define( 'NB_NOTES_DB_VERSION', '1.0.0' );
+
 if( !defined( 'NB_NOTES_PATH' ) )
 	define( 'NB_NOTES_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -60,7 +63,8 @@ register_deactivation_hook( __FILE__, '\Nb_Notes\deactivate' );
  */
 function activate() {
 	
-	//\Nb_Notes\App\Clss\Nb_Notes_Activator::activate(); 
+	\Nb_Notes\App\Clss\Nb_Notes_Activator::activate(); 
+	
 	do_action( 'nb_notes_activate' );
 
 }

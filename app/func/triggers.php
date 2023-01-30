@@ -71,7 +71,7 @@ function nb_activate_triggers(){
     if( !get_option( 'nb_notes_trigger_templates' ) )
     {
         
-        error_log(  var_export( \Nb_Notes\App\Func\TRIGGERS, true ) ); 
+        //error_log(  var_export( \Nb_Notes\App\Func\TRIGGERS, true ) ); 
         //array of triggers set with empty sub-arrays set as a holding bay for indexing of trigger templates (Nb_Notes_Templates CPTs)
         $base_triggers_array = []; 
 
@@ -81,6 +81,8 @@ function nb_activate_triggers(){
         }
 
         add_option( 'nb_notes_trigger_templates', $base_triggers_array ); 
+
+        //error_log(  var_export( get_option( 'nb_notes_trigger_templates' ), true ) ); 
     }
 
 }

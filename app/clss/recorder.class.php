@@ -72,7 +72,16 @@ if( !class_exists( 'Recorder' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
-		private $sender = 0; 
+		private $headers; 
+
+		/**
+		 * sender ID
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      (type)    $name   (description)
+		 */
+		private $attach; 
 		
 		/**
 		 * Status of the note being recorded. Sent, pending, unsent. 
@@ -90,7 +99,7 @@ if( !class_exists( 'Recorder' ) ){
 		 * @access   private 
 		 * @var      (type)    $name   (description)
 		 */
-		private $active = true; 
+		private $active = 1; 
 		
 		
 		
@@ -133,6 +142,8 @@ if( !class_exists( 'Recorder' ) ){
 			foreach( $package as $key => $item )
 				$this->set( $key, $item );		
 
+			$this->date = date("Y-m-d H:i:s");
+
 		}	
 
 
@@ -147,8 +158,8 @@ if( !class_exists( 'Recorder' ) ){
 
 		private function set( $key, $item )
 		{
-			
-			
+			if( property_exists( $this, $key )  )
+				$this->$key = $item; 
 		}
 		
 
@@ -156,6 +167,17 @@ if( !class_exists( 'Recorder' ) ){
 
 		/**
 		 * commit message in database for later use
+		 *
+		 * 	id mediumint(9) NOT NULL AUTO_INCREMENT,
+		 * 	note_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		 * 	note_type tinytext NOT NULL,
+		 * 	note_subject tinytext NOT NULL,
+		 * 	note_content text NOT NULL,
+		 * 	note_recipient int NOT NULL,
+		 * 	note_headers text NULL,
+		 * 	note_attach text NULL,
+		 * 	note_status tinytext NOT NULL,
+		 * 	note_active bit(1) DEFAULT 0 NOT NULL,
 		 *
 		 * @since     1.0.0
 		 * @param     $view
@@ -166,28 +188,32 @@ if( !class_exists( 'Recorder' ) ){
 			global $wpdb;
 			
 			$inserted = $wpdb->insert( 
-				'messages', 
+				'nb_notes', 
 				array( 
-					'message_date' => $this->date, 
-					'message_type' => $this->type, 
-					'message_content' => $this->content, 
-					'message_recipient' => $this->recipient, 
-					'message_status' => $this->status, 
-					'message_active' => $this->active
+					'note_date' => $this->date, 
+					'note_type' => $this->type, 
+					'note_subject' => $this->subject, 
+					'note_content' => $this->content, 
+					'note_recipient' => $this->receiver, 
+					'note_headers' => $this->headers, 
+					'note_attach' => $this->attach, 
+					'note_status' => $this->status, 
+					'note_active' => $this->active
 				), 
 				array( 
 					'%s',
 					'%s',
 					'%s',
+					'%s',
 					'%d',
 					'%s',
-					'%s'
+					'%s',
+					'%s',
+					'%d'
 				) 
 			);
-			
-			if( !empty( $inserted ) )
-				$this->ID = $wpdb->insert_id;
-				
+
+			return ( !empty( $inserted ) ) ? $wpdb->insert_id : 0 ;
 		}
 
 
@@ -201,18 +227,13 @@ if( !class_exists( 'Recorder' ) ){
 
 		public function record( $package, $sent ){
 
+			error_log( __METHOD__ . ": " . __LINE__ . ' We are going to record this in the database : ' . var_export( $this, true ) );
 			$this->init( $package );
-			$this->set_status( $sent );
+			$this->mark_status( $sent );			
+			$inserted_id = $this->commit();	
 			
-			
-			//add subject line to the beginning of the message. 
-			$this->content = "Subject: ". $this->subject ."
-		=================================
-		". $this->content;
-			
-			$this->commit();	
-			$this->archived = ( !empty( $this->ID ) )? true : false ; 
-
+			if( $inserted_id === 0 )
+				error_log( 'Failed to insert the note in the database for: ' . var_export( $this, true ) ); 
 		}
 
 
@@ -227,12 +248,12 @@ if( !class_exists( 'Recorder' ) ){
 
 		public function mark_status( $status ){
 			
-			if( strcmp( $status, $this->status ) !== 0 ){
+			if( strcmp( $status, $this->status ) !== 0 && !empty( $status ) ){
 				$this->status = $status;
 				
-				if( !empty( $this->ID ) ){
+				/* if(  $this->ID !===  ){
 					
-				}
+				} */
 				
 			} 
 			//check if message is recorded in databse. 

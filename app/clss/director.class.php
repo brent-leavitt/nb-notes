@@ -199,7 +199,7 @@ if( !class_exists( 'Director' ) ){
 			//Send the email
 			$sent = ( $this->builder->is_email() )? 
 					$this->sender->send( $package, $this->html ):
-					false;
+					'failed';
 			
 			//make a record of our actions.
 			$this->recorder->record( $package, $sent ); 
@@ -224,6 +224,7 @@ if( !class_exists( 'Director' ) ){
 			$this->builder->build( $this->params );
 
 			return array(
+				'type' 		=>	$this->builder->is_email()? 'email' : 'system' , //this logic is not recorded anywhere else. 
 				'receiver' 	=>	$this->receiver_id, 
 				'sender' 	=>	$this->sender_id, 
 				'subject' 	=>	$this->builder->get_subject(),
