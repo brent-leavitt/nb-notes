@@ -173,7 +173,7 @@ if( !class_exists( 'Director' ) ){
 			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug : new builders\Generic();
 		
 			
-			error_log( __METHOD__ .':LINE '. __LINE__. ' Builder Class: '. var_export( $this->builder, true ) );
+			//error_log( __METHOD__ .':LINE '. __LINE__. ' Builder Class: '. var_export( $this->builder, true ) );
 
 			//if notification requires email.		
 			if( $this->builder->is_email() )  

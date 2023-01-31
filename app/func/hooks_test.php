@@ -14,7 +14,7 @@ Namespace Nb_Notes\App\Func;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 add_action( 'nb_assignment_submitted', function( $a, $b ){
-    error_log( 'Called from nb_assignment_submitted hook in: ' .__FILE__  ); 
+    //error_log( 'Called from nb_assignment_submitted hook in: ' .__FILE__  ); 
 }, 10, 2 ); 
 
 add_action( 'nb_assignment_resubmitted', function( $a, $b ){

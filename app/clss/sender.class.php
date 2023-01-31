@@ -92,7 +92,7 @@ if( !class_exists( 'Sender' ) ){
 		 */
 		public function __construct(  ){
 				
-				
+				add_action( 'wp_mail_failed', array( $this, 'failed' ), 10, 1 );
 				
 		}
 		
@@ -117,7 +117,7 @@ if( !class_exists( 'Sender' ) ){
 			$prepared = $this->prepare(); 
 
 			//Then send the email if contents are prepared. 
-			return ( $prepared )? $this->do_send() : false; 
+			return ( $prepared )? $this->do_send() : 'not prepared'; 
 			
 		}	
 
@@ -133,8 +133,10 @@ if( !class_exists( 'Sender' ) ){
 		private function unpack( $package )
 		{
 			
-			$this->receiver_email	= $package[ 'receiver' ]; 
-			$this->sender_email 	= $package[ 'sender' ]; 
+			//Set receiver email
+
+			$this->receiver_email	= $this->get_email( $package[ 'receiver' ] ); 
+			$this->sender_email 	= $this->get_email( $package[ 'sender' ], true ); 
 			$this->subject 			= $package[ 'subject' ]; 
 			$this->content 			= $package[ 'content' ]; 
 			$this->attach 			= ( !empty( $package[ 'attach' ] ) )? 
@@ -154,16 +156,18 @@ if( !class_exists( 'Sender' ) ){
 		private function prepare()
 		{
 			//Assign From email address if available. 
-			$this->headers[] = ( !empty( $this->sender_email ) )? 'From: '.$this->sender_email : ''; 
+			$this->headers[] = ( !empty( $this->sender_email ) )? 'From:'.$this->sender_email : ''; 
 		
 			//Do a little more work if we are sending an HTML formatted email. 
 			if( strcmp( $this->format, 'html' ) === 0 )
 			{
-				include( NB_NOTES_PATH. '/app/tmpl/email/html_wrapper.php' ); 
+				include( NB_NOTES_PATH. 'app/tmpl/email/html_wrapper.php' ); 
 				$this->content = $nb_html_header . $this->content . $nb_html_footer;
 
 				$this->headers[] = 'Content-Type: text/html; charset=UTF-8'; 
 			}
+
+			error_log( 'email is prepared: '. var_export( $this, true ) ); 
 
 			//If no errors, let them know we're ready!
 			return true; 
@@ -176,7 +180,7 @@ if( !class_exists( 'Sender' ) ){
 		 * Hooking into WordPress mailer functionality. Logs error on failed send. 
 		 *
 		 * @since     1.0.0
-		 * @return    bool //returns true or false based on wp_mail response. 
+		 * @return    string //returns a string response that gets recorded in the database. 
 		 */	 
 		private function do_send()
 		{
@@ -185,28 +189,62 @@ if( !class_exists( 'Sender' ) ){
 							$this->subject, 
 							$this->content, 
 							$this->headers, 
-							$this->attach ); 
+							$this->attach ); 	
 
-			if( !$sent )
-			{
-				$headers = var_export( $this->headers, true ); 
-				$attach = var_export( $this->attach, true ); 
-
-				$message = "ERROR: Email not sent. The folowing parameters were passed. /n
-				 Receiver_Email: {$this->receiver_email} /n
-				 Subject: {$this->subject} /n
-				 Content: {$this->content} /n
-				 Headers: {$headers} /n
-				 Attachments: {$attach} "; 
-
-				error_log( $message ); 
-			}			
-
-			return $sent; 
+			return ( $sent )? 'sent' : 'failed'; 
 		
 		}
 		
 		
+		/**
+		 * Gets the user's email address from the user ID
+		 *
+		 * @since     1.0.0
+		 * @param     int $user_id
+		 * @return    MIXED $email or false 
+		 */	 
+		private function get_email(int $user_id, bool $is_sender = false )
+		{	
+			$email = '';
+			
+			//If the User_ID is something other than zero, 
+			//we are either going to find the email address 
+			//or declare false because the email	is not found.
+			if( $user_id !== 0 )
+			{
+				$user = get_user_by( 'id', $user_id );
+				$email = ( $user ) ? $user->user_email : false;
+			}		
+			
+			//If the email is set, send it home. 
+			if( !empty( $email ) )
+				return $email; 				
+
+			//However, if email is false but this is not a sender. We need to send a false return. 
+			if( $email === false && $is_sender === false )
+				return false;
+
+			//if we're still going we're going to assume that we're looking for a sender and we haven't found one yet. 
+			//return either the plugin specified system email address, or the website's default admin email address. 
+			$email = get_option( 'nb_notes_system_email' ); 
+			return ( !empty( $email ) )? $email : get_option( 'admin_email' ); 
+			
+		}
+	
+		/**
+		 * If WordPress Fails to send email, record the response to the error log. 
+		 *
+		 * @since     1.0.0
+		 * @param     object $WP_Error
+		 * @return    (type)    (description)
+		 */	 
+		public function failed( $error )
+		{
+
+			//error_log( 'Wordpress failed to send the email. Here are the details: '. var_export( $error, true ) ); 
+		
+		}
+	
 		/**
 		 * (description)
 		 *

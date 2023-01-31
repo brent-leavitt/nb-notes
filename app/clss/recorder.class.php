@@ -227,7 +227,7 @@ if( !class_exists( 'Recorder' ) ){
 
 		public function record( $package, $sent ){
 
-			error_log( __METHOD__ . ": " . __LINE__ . ' We are going to record this in the database : ' . var_export( $this, true ) );
+			//error_log( __METHOD__ . ": " . __LINE__ . ' We are going to record this in the database : ' . var_export( $this, true ) );
 			$this->init( $package );
 			$this->mark_status( $sent );			
 			$inserted_id = $this->commit();	

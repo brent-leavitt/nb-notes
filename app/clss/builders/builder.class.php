@@ -101,10 +101,8 @@ if( !class_exists( 'Builder' ) ){
 		 */
 		protected function finalize()
 		{
-			error_log( __METHOD__. ' is called.' ); 
 			//Append Website Name to end of Subject Line
 			$this->subject .= ' - '. get_bloginfo( 'name' ); 
-			
 		}
 		
 
