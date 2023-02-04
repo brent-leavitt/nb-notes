@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * The HTML Header Variable. 
+ * 
+ */
 
 $nb_html_header='
 <!DOCTYPE html>
@@ -43,9 +47,12 @@ $nb_html_header='
 																		<tr><td class="td" cellspacing="0" cellpadding="6"  style="width: 100%; font-family: Raleway,  Arial, sans-serif; color: #747475; border: 1px solid #e5e5e5;">
 ';
 
+/*
+ * The HTML Footer Variable. 
+ * 
+ */
+
 $nb_html_footer='
-
-
 </td></tr>
 																	</tbody>
 																</table>

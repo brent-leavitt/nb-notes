@@ -28,8 +28,19 @@ if( !class_exists( 'Assignment' ) ){
 		 * private $subject; //string
 		 * private $is_email = true; //bool
 		 * 
-		 * 
 		 */
+	
+		
+		/**
+		 * Admin Level Notice? We will build out the assignment information differently if this is being sent to an admin user. 
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      bool    $is_admin   //Nees to send in through the build params, probably. 
+		 */
+		private $is_admin = false; 
+		
+		
 		
 		
 		
@@ -95,9 +106,11 @@ if( !class_exists( 'Assignment' ) ){
 		 *
 		 * @since     1.0.0
 		 * @param     array 	$params 	
+		 * @param     bool	 	$html 	//default is false
 		 * @return    (type)    (description)
 		 */	 
-		public function build( array $params )
+
+		public function build( array $params, bool $html = false )
 		{
 			//incoming parameters
 			/*
@@ -110,7 +123,7 @@ if( !class_exists( 'Assignment' ) ){
 			$this->content = $params[ 'content' ]; //do_shortcode( $params[ 'content' ] ); //I don't think this works.  
 
 			//call and append the assignment receipt.
-			$this->content .= $this->add_receipt( $params[ 'args' ][ 'asmt_id' ] );
+			$this->content .= $this->add_receipt( $params[ 'args' ][ 'asmt_id' ], $html );
 
 			//assign incoming subject to subject property. 
 			$this->subject = $params[ 'subject' ]; 
@@ -125,10 +138,11 @@ if( !class_exists( 'Assignment' ) ){
 		 * Appends an assignment receipt to the content being generated. 
 		 *
 		 * @since     1.0.0
-		 * @param     int 	$asmt_id
+		 * @param     int 		$asmt_id
+		 * @param     bool	 	$html
 		 * @return    (type)    (description)
 		 */
-		private function add_receipt( int $asmt_id )
+		private function add_receipt( int $asmt_id, bool $html )
 		{
 			$asmt = get_post( $asmt_id );
 			
@@ -137,22 +151,7 @@ if( !class_exists( 'Assignment' ) ){
 			$asmt_url = home_url('/?p=').$course_id;
 
 			//build out the receipt
-			return "
-========================
-
-Assignment Name: {$asmt->post_title}
-
-Assignment: 
-{$asmt->post_content}
-
-=======================
-
-Link: {$asmt_url}
-Assignment ID: {$asmt->ID}
-Student ID: {$asmt->post_author}
-Last submitted: {$asmt->post_modified}
-
-=======================";
+			return ( $html )? $this->build_html_receipt( $asmt, $asmt_url ) : $this->build_plain_receipt( $asmt, $asmt_url ) ; 
 			
 		}
 		
@@ -234,6 +233,70 @@ Last submitted: {$asmt->post_modified}
 
 
 		
+		
+		/**
+		 * Build Plain Text Receipt
+		 *
+		 * @since     1.0.0
+		 * @param     object 	$asmt
+		 * @param     string 	$url
+		 * @return    string 
+		 */	 
+
+		private function build_plain_receipt( object $asmt, string $url): string
+		{
+			$receipt ="
+			========================
+			
+			Assignment Name: {$asmt->post_title}
+			
+			Assignment: 
+			{$asmt->post_content}
+			
+			=======================
+			
+			Link: {$url}
+			Assignment ID: {$asmt->ID}
+			Student ID: {$asmt->post_author}
+			Last submitted: {$asmt->post_modified}
+			
+			======================="; 
+			
+			return $receipt; 
+		}
+		
+		/**
+		 * Build HTML Receipt
+		 *
+		 * @since     1.0.0
+		 * @param     object 	$asmt
+		 * @param     string 	$url
+		 * @return    string 
+		 */	 
+		
+		private function build_html_receipt( object $asmt, string $url): string
+		{
+			$receipt ="
+			<hr>
+			
+			<ul>
+				<li><b>Assignment Name:</b> {$asmt->post_title}</li>
+			
+				<li><b>Assignment:</b><br>
+					{$asmt->post_content}</li>
+			</ul>
+		<hr>
+			<ul>
+				<li><b>Link:</b> {$url}</li>
+				<li><b>Assignment ID:</b> {$asmt->ID}</li>
+				<li><b>Student ID:</b> {$asmt->post_author}</li>
+				<li><b>Last submitted:</b> {$asmt->post_modified}</li>
+			
+			<hr>"; 
+			
+			return $receipt; 
+		}
+	
 		
 		/**
 		 * (description)

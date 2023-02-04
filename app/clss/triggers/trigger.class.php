@@ -179,7 +179,7 @@ if( !class_exists( 'Trigger' ) ){
 			else
 			{	//if not template is available, maybe have system default.
 				//load a default template for this hook. Has (some variables) $content pre-defined. 
-				include( NB_NOTES_PATH. 'app/tmpl/email/defaults/' . strtolower( $this::TRIGGER ) .'.tmpl.php' ); 
+				include( NB_NOTES_PATH. 'app/tmpl/email/default_trigger_vars/' . strtolower( $this::TRIGGER ) .'.tmpl.php' ); 
 				
 				//May need to set inside of a foreach loop. 
 				foreach( $templates as $tmpl )

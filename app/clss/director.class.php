@@ -171,9 +171,6 @@ if( !class_exists( 'Director' ) ){
 			$builder_slug = '\Nb_Notes\App\Clss\Builders\\'. ucfirst( $this->slug );
 			
 			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug : new builders\Generic();
-		
-			
-			//error_log( __METHOD__ .':LINE '. __LINE__. ' Builder Class: '. var_export( $this->builder, true ) );
 
 			//if notification requires email.		
 			if( $this->builder->is_email() )  
@@ -221,7 +218,7 @@ if( !class_exists( 'Director' ) ){
 		 */
 		private function prepare(   )
 		{
-			$this->builder->build( $this->params );
+			$this->builder->build( $this->params, $this->html );
 
 			return array(
 				'type' 		=>	$this->builder->is_email()? 'email' : 'system' , //this logic is not recorded anywhere else. 

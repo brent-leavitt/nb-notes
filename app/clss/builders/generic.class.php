@@ -80,9 +80,10 @@ if( !class_exists( 'Generic' ) ){
 		 *
 		 * @since     1.0.0
 		 * @param     array 	$params 	
+		 * @param     bool 	$html 	//default is false
 		 * @return    (type)    (description)
 		 */	 
-		public function build( array $params )
+		public function build( array $params, bool $html = false )
 		{
 			//What parameters are being sent to the builder? 
 
