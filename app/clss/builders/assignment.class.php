@@ -28,21 +28,7 @@ if( !class_exists( 'Assignment' ) ){
 		 * private $subject; //string
 		 * private $is_email = true; //bool
 		 * 
-		 */
-	
-		
-		/**
-		 * Admin Level Notice? We will build out the assignment information differently if this is being sent to an admin user. 
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      bool    $is_admin   //Nees to send in through the build params, probably. 
-		 */
-		private $is_admin = false; 
-		
-		
-		
-		
+		 */		
 		
 		
 		/**
@@ -145,13 +131,9 @@ if( !class_exists( 'Assignment' ) ){
 		private function add_receipt( int $asmt_id, bool $html )
 		{
 			$asmt = get_post( $asmt_id );
-			
-			$course_id = $asmt->post_parent; //
-				
-			$asmt_url = home_url('/?p=').$course_id;
 
 			//build out the receipt
-			return ( $html )? $this->build_html_receipt( $asmt, $asmt_url ) : $this->build_plain_receipt( $asmt, $asmt_url ) ; 
+			return ( $html )? $this->build_html_receipt( $asmt ) : $this->build_plain_receipt( $asmt ) ; 
 			
 		}
 		
@@ -235,7 +217,7 @@ if( !class_exists( 'Assignment' ) ){
 		
 		
 		/**
-		 * Build Plain Text Receipt
+		 * Build Plain Text Receipt, that will be sent to admin/trainers etc. 
 		 *
 		 * @since     1.0.0
 		 * @param     object 	$asmt
@@ -243,22 +225,24 @@ if( !class_exists( 'Assignment' ) ){
 		 * @return    string 
 		 */	 
 
-		private function build_plain_receipt( object $asmt, string $url): string
+		private function build_plain_receipt( object $asmt ): string
 		{
+
+			$url = home_url('/wp-admin/post.php?action=edit&post=') . $asmt->ID;
+
 			$receipt ="
 			========================
 			
 			Assignment Name: {$asmt->post_title}
+			Date Last Submitted: {$asmt->post_modified}
 			
-			Assignment: 
-			{$asmt->post_content}
-			
+			Grade Assignment: 
+			{$url}
+
 			=======================
 			
-			Link: {$url}
 			Assignment ID: {$asmt->ID}
 			Student ID: {$asmt->post_author}
-			Last submitted: {$asmt->post_modified}
 			
 			======================="; 
 			
@@ -274,25 +258,28 @@ if( !class_exists( 'Assignment' ) ){
 		 * @return    string 
 		 */	 
 		
-		private function build_html_receipt( object $asmt, string $url): string
+		private function build_html_receipt( object $asmt ): string
 		{
+			$course_id = $asmt->post_parent; //
+				
+			$asmt_url = home_url('/?p=').$course_id;
+			$hr = '<hr style="border: #e5e5e5 1px solid;" >';
+
 			$receipt ="
-			<hr>
+			{$hr}	
+			<h4>Assignment Name: <a href='{$asmt_url}'  style='color:#AC1B5C;'  target='_blank' >{$asmt->post_title}</a></h4>
 			
-			<ul>
-				<li><b>Assignment Name:</b> {$asmt->post_title}</li>
+			<h4>Assignment:</h4>
 			
-				<li><b>Assignment:</b><br>
-					{$asmt->post_content}</li>
-			</ul>
-		<hr>
+			{$asmt->post_content}
+
+			{$hr}
 			<ul>
-				<li><b>Link:</b> {$url}</li>
 				<li><b>Assignment ID:</b> {$asmt->ID}</li>
 				<li><b>Student ID:</b> {$asmt->post_author}</li>
 				<li><b>Last submitted:</b> {$asmt->post_modified}</li>
-			
-			<hr>"; 
+			</ul>
+			"; 
 			
 			return $receipt; 
 		}

@@ -92,7 +92,7 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 			$this->source = 'student'; 
 
 			//pull the trigger. 
-			$this->fire(); 
+			$this->build(); 
 		}	
 
 		
