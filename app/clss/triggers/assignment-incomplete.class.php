@@ -5,7 +5,9 @@ Namespace Nb_Notes\App\Clss\Triggers;
 
 
 /**
- * Trigger that is fired when an assignment is submitted. 
+ * Trigger that is fired when an assignment is marked as incomplete, 
+ * meaning that the trainer is requesting more information 
+ * of the student for the given assingment. 
  *
  * @since      1.0.0
  * @package    Nb_Notes
@@ -16,8 +18,8 @@ Namespace Nb_Notes\App\Clss\Triggers;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Assignment_Submitted' ) ){ 
-	class Assignment_Submitted extends Trigger { 
+if( !class_exists( 'Assignment_Incomplete' ) ){ 
+	class Assignment_Incomplete extends Trigger { 
 
 		/**
 		 * (description)
@@ -26,23 +28,14 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 * @access   protected 
 		 * @var      string    TRIGGER   (description)
 		 */
-		protected const TRIGGER = 'Assignment_Submitted'; 
+		protected const TRIGGER = 'Assignment_Incomplete'; 
 		
-		/**
-		 * (description)
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      (type)    $name   (description)
-		 */
-		private $_; 
 		
 		
 		//Then Methods
-
-
+		
 		/**
-		 * Listening for 
+		 * Listening for the 'nb_assignment_incomplete' trigger. 
 		 *
 		 * @since     1.0.0
 		 * @param     $view
@@ -50,7 +43,7 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 */	 
 		public function listen()
 		{
-			add_action( 'nb_assignment_submitted', [ $this, 'init' ], 10, 2 ); 
+			add_action( 'nb_assignment_incomplete', [ $this, 'init' ], 10, 2 ); 
 		}
 
 				
@@ -71,16 +64,17 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 			//The assignment ID is the only argument being passed to the builder from this trigger. 
 			$this->args[ 'asmt_id' ] = $args[ 0 ];
 			
-			//Define submitter_id, target_id, and source of the trigger. 
-			//Submitter ID will be the student, or author of the post. 
-			$this->submitter_id = $args[1]->post_author;
-			
-			//Assuming the source of all submitted assignmen triggers are students, but probably should verify this. 
-			$this->source = 'student'; 
+			//Define submitter_id and source of the trigger. 
+			//Submitter ID will be the trainer assigned to the student. 
+			$this->submitter_id = get_assigned_trainer_id_from_student_id( $args[1]->post_author );
+		
+			//The source of an assignment_incomplete trigger is only from a trainer. 
+			$this->source = 'trainer'; 
 
 			//pull the trigger. 
 			$this->build(); 
 		}	
 	}
 }
+
 ?>

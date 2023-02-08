@@ -5,7 +5,7 @@ Namespace Nb_Notes\App\Clss\Triggers;
 
 
 /**
- * Trigger that is fired when an assignment is submitted. 
+ * Trigger that is fired when an assignment is marked as completed. 
  *
  * @since      1.0.0
  * @package    Nb_Notes
@@ -16,8 +16,8 @@ Namespace Nb_Notes\App\Clss\Triggers;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Assignment_Submitted' ) ){ 
-	class Assignment_Submitted extends Trigger { 
+if( !class_exists( 'Assignment_Completed' ) ){ 
+	class Assignment_Completed extends Trigger { 
 
 		/**
 		 * (description)
@@ -26,23 +26,12 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 * @access   protected 
 		 * @var      string    TRIGGER   (description)
 		 */
-		protected const TRIGGER = 'Assignment_Submitted'; 
-		
-		/**
-		 * (description)
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      (type)    $name   (description)
-		 */
-		private $_; 
-		
-		
+		protected const TRIGGER = 'Assignment_Completed'; 
+
 		//Then Methods
-
-
+		
 		/**
-		 * Listening for 
+		 * Listening for when the nb_assignment_completed is fired. 
 		 *
 		 * @since     1.0.0
 		 * @param     $view
@@ -50,10 +39,9 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 */	 
 		public function listen()
 		{
-			add_action( 'nb_assignment_submitted', [ $this, 'init' ], 10, 2 ); 
+			add_action( 'nb_assignment_completed', [ $this, 'init' ], 10, 2 ); 
 		}
-
-				
+		
 		
 		/**
 		 * Initializes and executes the action hook //NEEDS WORK BECAUSE IT NEEDS TO LISTEN TO THE INCOMING PARAMATERS. 
@@ -71,16 +59,16 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 			//The assignment ID is the only argument being passed to the builder from this trigger. 
 			$this->args[ 'asmt_id' ] = $args[ 0 ];
 			
-			//Define submitter_id, target_id, and source of the trigger. 
-			//Submitter ID will be the student, or author of the post. 
-			$this->submitter_id = $args[1]->post_author;
+			//Define submitter_id and source of the trigger. 
+			//Submitter ID will be the trainer, who graded the assignment.  
+			$this->submitter_id = get_assigned_trainer_id_from_student_id( $args[1]->post_author );
 			
 			//Assuming the source of all submitted assignmen triggers are students, but probably should verify this. 
-			$this->source = 'student'; 
+			$this->source = 'trainer'; 
 
 			//pull the trigger. 
 			$this->build(); 
-		}	
+		}
 	}
 }
 ?>

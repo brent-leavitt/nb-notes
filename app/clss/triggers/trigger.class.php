@@ -65,19 +65,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @var      array
 		 */
 		protected $args; 
-		
-		
-
-		/**
-		 * (description)
-		 *
-		 * @since    1.0.0
-		 * @access   protected 
-		 * @var      (type)    $name   (description)
-		 */
-		//protected $_; 
-		
-		
+	
 
 		
 		//Then Methods
@@ -89,12 +77,9 @@ if( !class_exists( 'Trigger' ) ){
 		 * @param     $view
 		 * @return    (type)    (description)
 		 */
-		public function __construct(  ){
-				
-				
-				
+		public function __construct(  )
+		{
 		}
-
 
 
 		/**
@@ -130,20 +115,7 @@ if( !class_exists( 'Trigger' ) ){
 
 		 protected function send( $receiver, $sender, $builder, $params, $html = true )
 		 {			
-			/* 
-			error_log( 'The send method from the trigger abstract class has been called. These are the parameters being sent: 
-			 	RECEIVER: '.$receiver.'
-			 	SENDER: '.$sender .'
-			 	BUILDER: '.$builder .'
-			 	PARAMS: '. var_export( $params , true ) .'
-			 	HTML: '.$html 
-			);
-			*/
-			/*
-			error_log( "The RECIEVER ID is: ".	$this->get_user_id( $receiver ). "
-				The SENDER ID is: ".	$this->get_user_id( $sender )  ); 
-			*/
-
+			
 			$director = new Director( 
 				$this->get_user_id( $receiver ), 
 				$this->get_user_id( $sender ), 
@@ -164,29 +136,41 @@ if( !class_exists( 'Trigger' ) ){
 		 * @param     string 	$user_type
 		 * @return    int		$user_id
 		 */	 
-		public function get_user_id( $user_type ): int
+		private function get_user_id( $user_type ): int
 		{
 			return ( strcmp( $user_type, $this->source ) == 0 )? $this->submitter_id : $this->set_target_id( $user_type ); 
 		}
 
-				 
+		
 		/**
-		 * (description)
+		 * Returns the targetted receiver's user ID. 
 		 *
 		 * @since     1.0.0
 		 * @param     $view
 		 * @return    (type)    (description)
-		 */	 
-		public function _()
+		 */
+
+		private function set_target_id( $type )
 		{
+			switch( $type ){
+				//Get "trainer" type from student meta, returns the trainer's ID or 0 if not found. 
+				case "trainer":
+					return  get_user_meta( $this->submitter_id, 'student_trainer', TRUE ) ?? 0 ;
 
-			
-		
+				//Get "admin" type, If this notice is being targetted to the admin set as -1 because there are multiple admins.	
+				case "admin":
+					return -1; 
+				
+				//"student" type, should never be triggered here, but just in case. 	
+				case "student":
+					return $this->submitter_id; 
+
+				//"system" type is default at 0, and hence should not be set here either.	
+				case "system":
+				default:
+					return 0;
+			}
 		}
-
-
-
 	}
-
 }
 ?>

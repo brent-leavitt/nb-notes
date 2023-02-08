@@ -5,7 +5,7 @@ Namespace Nb_Notes\App\Clss\Triggers;
 
 
 /**
- * Trigger that is fired when an assignment is submitted. 
+ * Trigger that is fired when an assignment is resubmitted. 
  *
  * @since      1.0.0
  * @package    Nb_Notes
@@ -16,8 +16,8 @@ Namespace Nb_Notes\App\Clss\Triggers;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Assignment_Submitted' ) ){ 
-	class Assignment_Submitted extends Trigger { 
+if( !class_exists( 'Assignment_Resubmitted' ) ){ 
+	class Assignment_Resubmitted extends Trigger { 
 
 		/**
 		 * (description)
@@ -26,21 +26,12 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 * @access   protected 
 		 * @var      string    TRIGGER   (description)
 		 */
-		protected const TRIGGER = 'Assignment_Submitted'; 
+		protected const TRIGGER = 'Assignment_Resubmitted'; 
 		
-		/**
-		 * (description)
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      (type)    $name   (description)
-		 */
-		private $_; 
-		
-		
+
 		//Then Methods
-
-
+		
+		
 		/**
 		 * Listening for 
 		 *
@@ -50,7 +41,7 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 		 */	 
 		public function listen()
 		{
-			add_action( 'nb_assignment_submitted', [ $this, 'init' ], 10, 2 ); 
+			add_action( 'nb_assignment_resubmitted', [ $this, 'init' ], 10, 2 ); 
 		}
 
 				
@@ -80,7 +71,7 @@ if( !class_exists( 'Assignment_Submitted' ) ){
 
 			//pull the trigger. 
 			$this->build(); 
-		}	
+		}
 	}
 }
 ?>

@@ -208,6 +208,7 @@ class Nb_Notes {
 			'setup',
 			'triggers',
 			'listeners',
+			'persons',
 			'hooks_test',
 			//''
 
