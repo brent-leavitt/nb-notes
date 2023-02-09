@@ -16,8 +16,8 @@ use function Nb_Notes\App\Func\notify;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( '' ) ){ 
-	class  extends Trigger { 
+if( !class_exists( 'New_Student_Registration' ) ){ 
+	class New_Student_Registration extends Trigger { 
 
 		/**
 		 * (description)
@@ -26,36 +26,12 @@ if( !class_exists( '' ) ){
 		 * @access   private 
 		 * @var      const    $name   (description)
 		 */
-		protected const TRIGGER = ''; 
+		protected const TRIGGER = 'New_Student_Registration'; 
 		
-		/**
-		 * (description)
-		 *
-		 * @since    1.0.0
-		 * @access   private 
-		 * @var      (type)    $name   (description)
-		 */
-		private $; 
-		
-		
-
 		
 		//Then Methods
 
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		public function __construct(  ){
-				
-				
-				
-		}
-		
-		
+	
 		/**
 		 * Listening for 
 		 *
@@ -66,7 +42,7 @@ if( !class_exists( '' ) ){
 		public function listen()
 		{
 
-			add_action( 'nb_', [ $this, 'init' ] ); 
+			add_action( 'nb_new_student_registration', [ $this, 'init' ] ); 
 		
 		}
 			

@@ -36,7 +36,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @access   protected 
 		 * @var      int
 		 */
-		//protected $target_id = 0; 
+		protected $target_id = 0; 
 		
 		/**
 		 * The source of the submitted trigger, it could be a student, trainer, admin, or system. Default is system.  
@@ -152,24 +152,31 @@ if( !class_exists( 'Trigger' ) ){
 
 		private function set_target_id( $type )
 		{
-			switch( $type ){
-				//Get "trainer" type from student meta, returns the trainer's ID or 0 if not found. 
-				case "trainer":
-					return  get_user_meta( $this->submitter_id, 'student_trainer', TRUE ) ?? 0 ;
+			if( !empty( $this->target_id ) )
+				return $this->target_id; 
 
-				//Get "admin" type, If this notice is being targetted to the admin set as -1 because there are multiple admins.	
-				case "admin":
-					return -1; 
-				
-				//"student" type, should never be triggered here, but just in case. 	
-				case "student":
-					return $this->submitter_id; 
+			//This set of logic only works when the submitter is a student, not a trainer. or when source = 'student'
+			if( strcmp( $this->source, 'student' ) === 0 ){
+				switch( $type ){
+					//Get "trainer" type from student meta, returns the trainer's ID or 0 if not found. 
+					case "trainer":
+						return  get_user_meta( $this->submitter_id, 'student_trainer', TRUE ) ?? 0 ;
 
-				//"system" type is default at 0, and hence should not be set here either.	
-				case "system":
-				default:
-					return 0;
-			}
+					//Get "admin" type, If this notice is being targetted to the admin set as -1 because there are multiple admins.	
+					case "admin":
+						return -1; 
+					
+					//"student" type, should never be triggered here, but just in case. 	
+					case "student":
+						return $this->submitter_id; 
+
+					//"system" type is default at 0, and hence should not be set here either.	
+					case "system":
+					default:
+						return 0;
+				}
+			}	
+			
 		}
 	}
 }
