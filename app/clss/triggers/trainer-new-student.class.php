@@ -60,53 +60,19 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 			//This is where the incoming parameter data is received. 
 			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 			
+			//student ID
+			$this->submitter_id = $args[ 0 ];
+
+			//Trainer ID 
+			$this->target_id = $args[ 1 ]; 
+			
+			//This is a system generated notification, as a part of the registration process. 
+			$this->source = 'system'; 
+
 			//pull the trigger. 
 			$this->build(); 
+			
 		}	
-
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function set_()
-		{
-		
-			
-		}
-		
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function get_(){
-		
-			
-		}
-	
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */	 
-		public function _()
-		{
-
-			
-		
-		}
 
 	}
 

@@ -59,9 +59,7 @@ if( !class_exists( 'New_Student_Registration' ) ){
 
 			//This is where the incoming parameter data is received. 
 			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
-			//This trigger may be impossible to test locally as we need a sandbox gateway to work for us first, and the action 
-			//hook associated with this only gets called with system initiates the action, I don't believe it can be manually triggered.
-			
+		
 			/*  REFERENCE
 			
 			RCP_Membership::__set_state(array(
@@ -101,7 +99,7 @@ if( !class_exists( 'New_Student_Registration' ) ){
 
 			//Define target_id and submitter_id 
 			//Needs to be extracted from membership
-		/*	$this->target_id = $args[ 1 ]->user_id; //Student_ID //NEEDS TO BE TESTED. 
+			$this->target_id = $args[ 1 ]->user_id; //Student_ID 
 
 			//The membership data is being passed to the builder from this trigger. 
 			$this->args[ 'membership' ] = $args[ 1 ];
@@ -110,54 +108,10 @@ if( !class_exists( 'New_Student_Registration' ) ){
 			$this->source = 'system'; //otherwise assume that it is an adminstrator who is commenting. 
 
 			//pull the trigger. 
-			$this->build();  */
+			$this->build(); 
+			
 		}	
 
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function set_()
-		{
-		
-			
-		}
-		
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function get_(){
-		
-			
-		}
-	
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */	 
-		public function _()
-		{
-
-			
-		
-		}
-
 	}
-
 }
 ?>

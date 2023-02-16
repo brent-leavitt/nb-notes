@@ -56,11 +56,28 @@ if( !class_exists( 'Trainer_Reassignment' ) ){
 		 */
 
 		 public function init( ...$args ) {
-
+ 
 			//This is where the incoming parameter data is received. 
+			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
+			
+
+			//This is a little different because we want all three to be notified: student, old trainer, and new trainer. 
+			//defaults to system as the source of the notice 
+			$this->submitter_id = 0;
+
+			//the student being impacted by the reassignment. 
+			$this->target_id = $args[ 0 ]; 
+
+			//who are the trainers impacted by this reassignment?
+			$this->args[ 'trainers' ][ 'old_trainer' ] = $args[ 1 ]; 
+			$this->args[ 'trainers' ][ 'new_trainer' ] = $args[ 2 ];
+			
+			//Assuming the source of the trainer reassignment would only be an administrator. 
+			$this->source = 'admin'; 
+
 
 			//pull the trigger. 
-			$this->fire(); 
+			$this->build(); 
 		}	
 
 		
