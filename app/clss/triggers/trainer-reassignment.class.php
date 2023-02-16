@@ -42,7 +42,7 @@ if( !class_exists( 'Trainer_Reassignment' ) ){
 		public function listen()
 		{
 
-			add_action( 'nb_trainer_reassignment', [ $this, 'init' ] ); 
+			add_action( 'nb_trainer_reassignment', [ $this, 'init' ], 10, 4 ); 
 		
 		}
 			
@@ -51,7 +51,7 @@ if( !class_exists( 'Trainer_Reassignment' ) ){
 		 * Initializes and executes the action hook //NEEDS WORK BECAUSE IT NEEDS TO LISTEN TO THE INCOMING PARAMATERS. 
 		 *
 		 * @since     1.0.0
-		 * @param     array ...$args
+		 * @param     array ...$args //action hook params: user_id, old_trainer, new_trainer, userdata
 		 * @return    void
 		 */
 

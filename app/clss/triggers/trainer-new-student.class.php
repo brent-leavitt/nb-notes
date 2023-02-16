@@ -20,7 +20,7 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 	class Trainer_New_Student extends Trigger { 
 
 		/**
-		 * (description)
+		 * Difference between this and the 'new-student-registration' triggers are the data that they receive from the action hook. 
 		 *
 		 * @since    1.0.0
 		 * @access   private 
@@ -42,7 +42,7 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 		public function listen()
 		{
 
-			add_action( 'nb_trainer_new_student', [ $this, 'init' ] ); 
+			add_action( 'nb_trainer_new_student', [ $this, 'init' ], 10, 2 ); 
 		
 		}
 			
@@ -51,16 +51,17 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 		 * Initializes and executes the action hook //NEEDS WORK BECAUSE IT NEEDS TO LISTEN TO THE INCOMING PARAMATERS. 
 		 *
 		 * @since     1.0.0
-		 * @param     array ...$args
+		 * @param     array ...$args // params: $student_id,  $next_trainer_id
 		 * @return    void
 		 */
 
 		 public function init( ...$args ) {
 
 			//This is where the incoming parameter data is received. 
-
+			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
+			
 			//pull the trigger. 
-			$this->fire(); 
+			$this->build(); 
 		}	
 
 		
