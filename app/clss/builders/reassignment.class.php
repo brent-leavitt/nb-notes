@@ -175,8 +175,7 @@ if( !class_exists( 'Reassignment' ) ){
 			<ul>
 				 <li><b>Old Trainer:</b> {$old_trainer->first_name} {$old_trainer->last_name}</li>
 				 <li><b>New Trainer:</b> {$new_trainer->first_name} {$new_trainer->last_name}</li>
-			</ul>
-			{$hr}"; 
+			</ul>"; 
 			 
 			 return $receipt; 
 		 }

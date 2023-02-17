@@ -62,7 +62,7 @@ if( !class_exists( 'Trainer_Reassignment' ) ){
 			
 			//This is a little different because we want all three to be notified: student, old trainer, and new trainer. 
 			//defaults to system as the source of the notice 
-			$this->submitter_id = 0;
+			$this->submitter_id = get_current_user_id();
 
 			//the student being impacted by the reassignment. 
 			$this->target_id = $args[ 0 ]; 
