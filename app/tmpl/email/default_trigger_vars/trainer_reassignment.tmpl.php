@@ -9,7 +9,7 @@ $templates = [
         'builder'   => 'reassignment',    //Which builder will be used to finish the construction of this email.
         'html'      => true,           //Is this sent in HTML format (true) or plain text (false)
         'params'    => [
-            'content' 	=> 'Your trainer has switched.', //(incomplete)
+            'content' 	=> 'Your account has been assigned a new trainer. Your new trainer will be your primary point of contact moving forward. Details of the change are as follows:', //(incomplete)
             'subject' 	=> 'Trainer Switch',
             'args' 		=> $this->args
 
@@ -22,7 +22,7 @@ $templates = [
         'builder'   => 'reassignment',    //Which builder will be used to finish the construction of this email.
         'html'      => false,           //Is this sent in HTML format (true) or plain text (false)
         'params'    => [
-            'content' 	=> 'The following student has be reassigned to a new trainer.',
+            'content' 	=> 'The following student has be reassigned to a new trainer:',
             'subject' 	=> 'Student Reassigned',
             'args' 		=> $this->args
 

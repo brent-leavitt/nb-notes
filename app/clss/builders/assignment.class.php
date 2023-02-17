@@ -135,36 +135,7 @@ if( !class_exists( 'Assignment' ) ){
 			//build out the receipt
 			return ( $html )? $this->build_html_receipt( $asmt ) : $this->build_plain_receipt( $asmt ) ; 
 			
-		}
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function set_()
-		{
-		
-			
-		}
-		
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function get_(){
-		
-			
-		}
-			
+		}	
 
 		
 		

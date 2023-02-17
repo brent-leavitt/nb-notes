@@ -86,15 +86,16 @@ if( !class_exists( 'Generic' ) ){
 		public function build( array $params, bool $html = false )
 		{
 			//What parameters are being sent to the builder? 
+			$site_name = get_bloginfo( 'name' ); 
 
 			//What actions need to be performed: 
-				//build out the content of the notification
-				$this->content = 'Temp holder for notification content. This is where the bulk of the message goes.'; 
-				
-				//build out the subject line of the notification
-				$this->subject = "Temp Messsage Subject - New Beginnings Doula Training";
+			//build out the content of the notification
+			$this->content = "You have received a message from". $site_name ; 
 			
+			//build out the subject line of the notification
+			$this->subject = "General Message";
 		
+	
 		}
 		
 		/**

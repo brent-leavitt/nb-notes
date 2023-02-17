@@ -60,13 +60,13 @@ if( !class_exists( 'Trainer_Reassignment' ) ){
 			//This is where the incoming parameter data is received. 
 			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 			
-
 			//This is a little different because we want all three to be notified: student, old trainer, and new trainer. 
 			//defaults to system as the source of the notice 
 			$this->submitter_id = 0;
 
 			//the student being impacted by the reassignment. 
 			$this->target_id = $args[ 0 ]; 
+			$this->args[ 'student' ] = $args[ 0 ];
 
 			//who are the trainers impacted by this reassignment?
 			$this->args[ 'trainers' ][ 'old_trainer' ] = $args[ 1 ]; 
@@ -75,55 +75,54 @@ if( !class_exists( 'Trainer_Reassignment' ) ){
 			//Assuming the source of the trainer reassignment would only be an administrator. 
 			$this->source = 'admin'; 
 
-
 			//pull the trigger. 
 			$this->build(); 
 		}	
 
-		
 		/**
-		 * (description)
+		 * The build function is overridden by this particular class because we need to notify two trainers instead of one. 
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function set_()
-		{
-		
-			
-		}
-		
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function get_(){
-		
-			
-		}
-	
-		
-		
-		/**
-		 * (description)
-		 *
-		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
+		 * @return    void
 		 */	 
-		public function _()
+		protected function build()
 		{
-
-			
+			//load a default template for this hook. Has (some variables) $content pre-defined. 
+			include( NB_NOTES_PATH. 'app/tmpl/email/default_trigger_vars/' . strtolower( $this::TRIGGER ) .'.tmpl.php' ); 
 		
+			foreach( $templates as $tmpl )
+				if( strcmp( $tmpl[ 'receiver' ], 'trainer' ) === 0 ){
+					//we need to repent this action twice, old and new trainer. 
+					
+					//First send to old trainer: 
+					$this->target_id = $this->args[ 'trainers' ][ 'old_trainer' ];
+					$this->send_one( $tmpl );
+
+					//Then send to new trainer: 
+					$this->target_id = $this->args[ 'trainers' ][ 'new_trainer' ];
+					$this->send_one( $tmpl );
+
+				}
+				else //assume it is the student we sending to. 
+				{
+					$this->target_id = $this->args[ 'student' ];
+					$this->send_one( $tmpl ); 
+				}
+				
 		}
 
+
+
+		/**
+		 * Send one email at a time.
+		 * 
+		 * @since     1.0.0
+		 * @return    void
+		 */	 
+		protected function send_one( $tmpl )
+		{
+			$this->send( $tmpl[ 'receiver' ], $tmpl[ 'sender' ], $tmpl[ 'builder' ], $tmpl[ 'params' ], $tmpl[ 'html' ],  );
+		}
 	}
 
 }

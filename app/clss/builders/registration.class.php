@@ -16,8 +16,8 @@ Namespace Nb_Notes\App\Clss\Builders;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
  
  
-if( !class_exists( 'Generic' ) ){ 
-	class Generic extends Builder { 
+if( !class_exists( 'Registration' ) ){ 
+	class Registration extends Builder { 
 
 		//Props
 
@@ -85,15 +85,18 @@ if( !class_exists( 'Generic' ) ){
 		 */	 
 		public function build( array $params, bool $html = false )
 		{
-			//What parameters are being sent to the builder? 
-			$site_name = get_bloginfo( 'name' ); 
-			//What actions need to be performed: 
-			//build out the content of the notification
-			$this->content = "You have received a message from". $site_name ; 
-			
-			//build out the subject line of the notification
-			$this->subject = "General Message - ". $site_name;
 		
+			//process incoming content, run shortcodes on it, then assign to content property. 
+			$this->content = $params[ 'content' ]; //do_shortcode( $params[ 'content' ] ); //I don't think this works.  
+
+			//call and append the assignment receipt.
+			$this->content .= $this->add_receipt( $params[ 'args' ][ 'asmt_id' ], $html );
+
+			//assign incoming subject to subject property. 
+			$this->subject = $params[ 'subject' ]; 
+			
+			//Finalize the notification to be sent. 
+			$this->finalize(); 
 	
 		}
 		
