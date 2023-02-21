@@ -33,7 +33,7 @@ if( !class_exists( 'New_Student_Registration' ) ){
 
 	
 		/**
-		 * Listening for 
+		 * Listening for 'nb_new_student_registration' action hook fired from 
 		 *
 		 * @since     1.0.0
 		 * @param     $view
@@ -99,7 +99,7 @@ if( !class_exists( 'New_Student_Registration' ) ){
 
 			//Define target_id and submitter_id 
 			//Needs to be extracted from membership
-			$this->target_id = $args[ 1 ]->user_id; //Student_ID 
+			$this->target_id = $args[ 1 ]->get_user_id(); //Student_ID 
 
 			//The membership data is being passed to the builder from this trigger. 
 			$this->args[ 'membership' ] = $args[ 1 ];

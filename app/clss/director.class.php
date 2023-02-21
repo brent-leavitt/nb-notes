@@ -169,10 +169,10 @@ if( !class_exists( 'Director' ) ){
 			
 			//Build notification
 			$builder_slug = '\Nb_Notes\App\Clss\Builders\\'. ucfirst( $this->slug );
-			error_log( "The builder slug is {$builder_slug}." ); 
+			//error_log( "The builder slug is {$builder_slug}." ); 
 			
 			$this->builder = ( class_exists( $builder_slug ) ) ? new $builder_slug : new builders\Generic();			
-			error_log( "The set builder property is ".var_export( $this->builder, true ) ); 
+			//error_log( "The set builder property is ".var_export( $this->builder, true ) ); 
 
 			//if notification requires email.		
 			if( $this->builder->is_email() )  

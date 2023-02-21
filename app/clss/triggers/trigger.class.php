@@ -136,7 +136,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @param     string 	$user_type
 		 * @return    int		$user_id
 		 */	 
-		private function get_user_id( $user_type ): int
+		protected function get_user_id( $user_type ): int
 		{
 			return ( strcmp( $user_type, $this->source ) == 0 )? $this->submitter_id : $this->set_target_id( $user_type ); 
 		}
@@ -150,7 +150,7 @@ if( !class_exists( 'Trigger' ) ){
 		 * @return    (type)    (description)
 		 */
 
-		private function set_target_id( $type )
+		protected function set_target_id( $type )
 		{
 			if( !empty( $this->target_id ) )
 				return $this->target_id; 

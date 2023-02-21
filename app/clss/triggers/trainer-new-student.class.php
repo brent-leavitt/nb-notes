@@ -2,6 +2,7 @@
 
 Namespace Nb_Notes\App\Clss\Triggers;
 use function Nb_Notes\App\Func\notify; 
+use Nb_Notes\App\Clss\Director; 
 
 
 /**
@@ -33,7 +34,7 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 
 		
 		/**
-		 * Listening for 
+		 * Listening for 'nb_trainer_new_student' action hook, fired from 
 		 *
 		 * @since     1.0.0
 		 * @param     $view
@@ -58,14 +59,15 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 		 public function init( ...$args ) {
 
 			//This is where the incoming parameter data is received. 
-			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
+			//error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 			
 			//student ID
-			$this->submitter_id = $args[ 0 ];
-
-			//Trainer ID 
-			$this->target_id = $args[ 1 ]; 
+			$this->target_id = $args[ 0 ]; 
 			
+			//set args to be sent:
+			$this->args[ 'student_id' ] = $args[ 0 ];
+			$this->args[ 'trainer_id' ] = $args[ 1 ];
+
 			//This is a system generated notification, as a part of the registration process. 
 			$this->source = 'system'; 
 
@@ -73,6 +75,46 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 			$this->build(); 
 			
 		}	
+
+
+		/**
+		 * The final action to be taken by any trigger 
+		 *
+		 * @since     1.0.0
+		 * @param     string	$receiver
+		 * @param     string 	$sender 	
+		 * @param     string 	$builder
+		 * @param     array 	$params
+		 * @param     bool 		$html 		//default is true
+		 * @return    void
+		 */	 
+
+		 protected function send( $receiver, $sender, $builder, $params, $html = true )
+		 {			
+			$receiver_id = 0; 
+
+			switch( $receiver ){
+				case 'student':
+					$receiver_id = $this->args[ 'student_id' ];
+					break;
+				case 'trainer': 
+					$receiver_id = $this->args[ 'trainer_id' ];
+					break;
+			}
+
+			$director = new Director( 
+				$receiver_id, 
+				$this->get_user_id( $sender ), 
+				$builder, 
+				$params,
+				$html
+			 ); 
+			
+			return $director->go(); 		 
+
+		 }
+	
+
 
 	}
 

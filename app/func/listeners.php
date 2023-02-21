@@ -62,8 +62,20 @@ add_action( 'wp_insert_comment', 'Nb_Notes\App\Func\asmt_comments', 10, 2 );
 
 
 function new_student_registration( $membership_id, $data )
-{
-    do_action( 'nb_new_student_registration', $membership_id, $data ); 
+{   
+   
+    //Check if new registration has a 'student' role assigned to them.
+    $user_id = $data->get_user_id(); 
+    $user = get_user_by( 'id', $user_id ); 
+    //error_log( 'Prepping for the nb_new_student_registration log to be fired, here is user info:'. var_export( $user, true ) ); 
+
+    if( in_array( 'student', (array) $user->roles ) ) {
+        do_action( 'nb_new_student_registration', $membership_id, $data ); 
+        //error_log( 'The nb_new_student_registration log should have been fired.'.__METHOD__ ); 
+
+    }
+          
+    
 }
 add_action( 'rcp_membership_post_activate', 'Nb_Notes\App\Func\new_student_registration', 10 , 2 );  
 

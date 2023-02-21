@@ -21,7 +21,7 @@ const TRIGGERS = [
     'Assignment_Resubmitted',
     'Assignment_Incomplete',
     'Assignment_Complete',
-    'Trainer_New_Student', //Cannot be tested in local, because payments are not able to be staged. 
+    'Trainer_New_Student',
     'Trainer_Reassignment',
     'New_Student_Comment',
     'New_Trainer_Comment',
