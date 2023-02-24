@@ -148,6 +148,7 @@ if( !class_exists( 'Reassignment' ) ){
 			 Old Trainer: {$old_trainer->first_name} {$old_trainer->last_name}
 			 New Trainer: {$new_trainer->first_name} {$new_trainer->last_name}
 
+
 			 ======================="; 
 			 
 			 return $receipt; 
@@ -174,7 +175,7 @@ if( !class_exists( 'Reassignment' ) ){
 			{$hr}
 			<ul>
 				 <li><b>Old Trainer:</b> {$old_trainer->first_name} {$old_trainer->last_name}</li>
-				 <li><b>New Trainer:</b> {$new_trainer->first_name} {$new_trainer->last_name}</li>
+				 <li><b>New Trainer:</b> {$new_trainer->first_name} {$new_trainer->last_name} ({$new_trainer->user_email})</li>
 			</ul>"; 
 			 
 			 return $receipt; 

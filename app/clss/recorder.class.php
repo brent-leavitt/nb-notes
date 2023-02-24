@@ -66,7 +66,7 @@ if( !class_exists( 'Recorder' ) ){
 		private $receiver; 
 
 		/**
-		 * sender ID
+		 * headers
 		 *
 		 * @since    1.0.0
 		 * @access   private 
@@ -75,7 +75,7 @@ if( !class_exists( 'Recorder' ) ){
 		private $headers; 
 
 		/**
-		 * sender ID
+		 * attachments
 		 *
 		 * @since    1.0.0
 		 * @access   private 
@@ -159,7 +159,7 @@ if( !class_exists( 'Recorder' ) ){
 		private function set( $key, $item )
 		{
 			if( property_exists( $this, $key )  )
-				$this->$key = $item; 
+				$this->$key = !empty( $item )? $item: NULL ; 
 		}
 		
 
@@ -195,8 +195,8 @@ if( !class_exists( 'Recorder' ) ){
 					'note_subject' => $this->subject, 
 					'note_content' => $this->content, 
 					'note_recipient' => $this->receiver, 
-					'note_headers' => $this->headers, 
-					'note_attach' => $this->attach, 
+					'note_headers' => !empty( $this->headers)? json_encode( $this->headers ): NULL, 
+					'note_attach' => !empty( $this->attach )? json_encode( $this->attach ): NULL, 
 					'note_status' => $this->status, 
 					'note_active' => $this->active
 				), 
@@ -221,17 +221,20 @@ if( !class_exists( 'Recorder' ) ){
 		 * Make a database record of the message being sent. 
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
+		 * @param     $package  Contains most of the information about the email to be sent. 
+		 * @param     $sent		Contains the status of the email being sent, whether it was successful or not. 
+		 * @return    NULL 
 		 **/	
 
 		public function record( $package, $sent ){
 
-			//error_log( __METHOD__ . ": " . __LINE__ . ' We are going to record this in the database : ' . var_export( $this, true ) );
 			$this->init( $package );
-			$this->mark_status( $sent );			
+			$this->mark_status( $sent );
+
+			error_log( __METHOD__ . ": " . __LINE__ . ' We are going to record this in the database : ' . var_export( $this, true ) );		
 			$inserted_id = $this->commit();	
-			
+			error_log( __METHOD__ . ": " . __LINE__ . " Inserted into database? Insert ID : {$inserted_id}" );
+
 			if( $inserted_id === 0 )
 				error_log( 'Failed to insert the note in the database for: ' . var_export( $this, true ) ); 
 		}

@@ -200,6 +200,12 @@ if( !class_exists( 'Director' ) ){
 					$this->sender->send( $package, $this->html ):
 					'failed';
 			
+
+			//Add headers and attachments to the package. 
+			$package += [
+				'headers' 	=> $this->sender->get_headers(),
+				'attach' 	=> $this->sender->get_attach()
+			];
 			//make a record of our actions.
 			$this->recorder->record( $package, $sent ); 
 
@@ -227,8 +233,7 @@ if( !class_exists( 'Director' ) ){
 				'receiver' 	=>	$this->receiver_id, 
 				'sender' 	=>	$this->sender_id, 
 				'subject' 	=>	$this->builder->get_subject(),
-				'content'	=>	$this->builder->get_content(),
-				//Could add an array of attachment links here.  
+				'content'	=>	$this->builder->get_content() 
 			); 
 		}
 		

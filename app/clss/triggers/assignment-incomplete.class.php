@@ -1,7 +1,7 @@
 <?php 
 
 Namespace Nb_Notes\App\Clss\Triggers;
-//use ; 
+use function Nb_Notes\App\Func\get_assigned_trainer_id_from_student_id ; 
 
 
 /**

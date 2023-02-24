@@ -70,6 +70,17 @@ if( !class_exists( 'Sender' ) ){
 		
 	
 		/**
+		 * headers
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      array //array of email headers, including the "from:" line. 
+		 */
+		private $headers = []; 
+		
+		
+	
+		/**
 		 * attachments
 		 *
 		 * @since    1.0.0
@@ -167,7 +178,7 @@ if( !class_exists( 'Sender' ) ){
 				$this->headers[] = 'Content-Type: text/html; charset=UTF-8'; 
 			}
 
-			error_log( 'email is prepared: '. var_export( $this, true ) ); 
+			//error_log( 'email is prepared: '. var_export( $this, true ) ); 
 
 			//If no errors, let them know we're ready!
 			return true; 
@@ -241,21 +252,32 @@ if( !class_exists( 'Sender' ) ){
 		public function failed( $error )
 		{
 
-			//error_log( 'Wordpress failed to send the email. Here are the details: '. var_export( $error, true ) ); 
+			error_log( 'Wordpress failed to send the email. Here are the details: '. var_export( $error, true ) ); 
 		
 		}
 	
 		/**
-		 * (description)
+		 * get the headers for recording in the database. 
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
+		 * @return    array   The array of headers prepared to be sent out with the email
 		 */	 
-		public function _()
+		public function get_headers()
 		{
 
-			
+			return $this->headers;
+		
+		}	
+		/**
+		 * get the attachements for recording in the databse. 
+		 *
+		 * @since     1.0.0
+		 * @return    array 	The array of attachments prepared to be sent out with the email.
+		 */	 
+		public function get_attach()
+		{
+
+			return $this->attach; 
 		
 		}
 

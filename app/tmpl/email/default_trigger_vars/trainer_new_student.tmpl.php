@@ -12,7 +12,7 @@ $templates = [
         'html'      => true,           //Is this sent in HTML format (true) or plain text (false)
         'params'    => [
             'content' 	=> 'Welcome! You have been assigned a trainer.',
-            'subject' 	=> 'Your Doula Trainer',
+            'subject' 	=> 'Meet Your Trainer',
             'args' 		=> $this->args
 
         ]

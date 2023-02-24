@@ -147,12 +147,12 @@ if( !class_exists( 'Trainer' ) ){
 			
 			$receipt ="
 			{$hr}
-			<ul>
-				 <li><b>Trainer:</b> {$trainer->first_name} {$trainer->last_name}</li>
-				 
-			</ul>"; 
-			 
-			 return $receipt; 
+			<p><b>Trainer:</b> {$trainer->first_name} {$trainer->last_name}</p>
+			<p><b>Email:</b> {$trainer->user_email}</p> 
+			<p><b>About:</b> {$trainer->description}</p>
+			"; 
+			
+			return $receipt; 
 		 }
 		
 		
