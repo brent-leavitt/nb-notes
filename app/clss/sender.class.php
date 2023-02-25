@@ -195,12 +195,15 @@ if( !class_exists( 'Sender' ) ){
 		 */	 
 		private function do_send()
 		{
-
+			error_log( "Inside the DO_SEND function, are headers set?  ". var_export( $this->headers, true ) ); 
+			
 			$sent = wp_mail( $this->receiver_email, 
 							$this->subject, 
 							$this->content, 
 							$this->headers, 
 							$this->attach ); 	
+
+			//error_log( "The DO_SEND function was called and the status of sent is: {$sent}." ); 				
 
 			return ( $sent )? 'sent' : 'failed'; 
 		

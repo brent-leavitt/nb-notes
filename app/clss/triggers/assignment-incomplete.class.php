@@ -1,7 +1,7 @@
 <?php 
 
 Namespace Nb_Notes\App\Clss\Triggers;
-use function Nb_Notes\App\Func\get_assigned_trainer_id_from_student_id ; 
+use function Nb_Notes\App\Func\get_assigned_trainer_id_from_student_id; 
 
 
 /**
@@ -67,6 +67,9 @@ if( !class_exists( 'Assignment_Incomplete' ) ){
 			//Define submitter_id and source of the trigger. 
 			//Submitter ID will be the trainer assigned to the student. 
 			$this->submitter_id = get_assigned_trainer_id_from_student_id( $args[1]->post_author );
+
+			//Student will be the target: 
+			$this->target_id = $args[1]->post_author;
 		
 			//The source of an assignment_incomplete trigger is only from a trainer. 
 			$this->source = 'trainer'; 

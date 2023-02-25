@@ -1,7 +1,7 @@
 <?php 
 
 Namespace Nb_Notes\App\Clss\Triggers;
-//use ; 
+use function Nb_Notes\App\Func\get_assigned_trainer_id_from_student_id; 
 
 
 /**
@@ -62,6 +62,9 @@ if( !class_exists( 'Assignment_Completed' ) ){
 			//Define submitter_id and source of the trigger. 
 			//Submitter ID will be the trainer, who graded the assignment.  
 			$this->submitter_id = get_assigned_trainer_id_from_student_id( $args[1]->post_author );
+
+			//Student will be the target: 
+			$this->target_id = $args[1]->post_author;
 			
 			//Assuming the source of all submitted assignmen triggers are students, but probably should verify this. 
 			$this->source = 'trainer'; 

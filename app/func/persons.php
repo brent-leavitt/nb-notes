@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  function get_assigned_trainer_id_from_student_id( int $sid ): int
  {
 
-    $student_trainer = get_usermeta( $sid, 'student_trainer', true );
+    $student_trainer = get_user_meta( $sid, 'student_trainer', true );
     return ( !empty( $student_trainer ) )? $student_trainer : 0 ; 
 
  }

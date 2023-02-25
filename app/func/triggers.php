@@ -20,7 +20,7 @@ const TRIGGERS = [
     'Assignment_Submitted',
     'Assignment_Resubmitted',
     'Assignment_Incomplete',
-    'Assignment_Complete',
+    'Assignment_Completed',
     'Trainer_New_Student',
     'Trainer_Reassignment',
     'New_Student_Comment',
