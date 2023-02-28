@@ -42,6 +42,25 @@ if( !class_exists( 'Trainer' ) ){
 		private $args; 
 		
 		
+		/**
+		 * Trainer 
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      object 
+		 */
+		private $trainer; 
+		
+		
+		/**
+		 * Admin Note 
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      string
+		 */
+		protected $admin_note = ''; 
+		
 		
 		//Methods
 
@@ -75,11 +94,17 @@ if( !class_exists( 'Trainer' ) ){
 			//process incoming content, run shortcodes on it, then assign to content property. 
 			$this->content = $params[ 'content' ]; //do_shortcode( $params[ 'content' ] ); //I don't think this works.  
 
+			//set the trainer object
+			$this->trainer = get_user_by( 'id', $this->args[ 'trainer_id' ] );
+
 			//call and append the assignment receipt.
 			$this->content .= $this->add_receipt( $html );
 
 			//assign incoming subject to subject property. 
 			$this->subject = $params[ 'subject' ]; 
+
+			//Build an admin_note. 
+			$this->build_admin_note(); 
 			
 			//Finalize the notification to be sent. 
 			$this->finalize(); 
@@ -139,9 +164,8 @@ if( !class_exists( 'Trainer' ) ){
 		 
 		 private function build_html_receipt(): string
 		 {
-			$args = $this->args;
-		
-			$trainer = get_user_by( 'id', $args[ 'trainer_id' ] );
+			
+			$trainer = $this->trainer;
 			
 			$hr = '<hr style="border: #e5e5e5 1px solid;" >';
 			
@@ -154,7 +178,42 @@ if( !class_exists( 'Trainer' ) ){
 			
 			return $receipt; 
 		 }
+
+				
+		/**
+		 * Builds the admin note to be recorded the student's file. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */	 
+
+		protected function build_admin_note()
+		{
+
+			$trainer = $this->trainer;
+
+			$this->admin_note = "{$trainer->first_name} {$trainer->last_name} has been assigned as trainer. A notice has been issued to both trainer and student."; 
 		
+		}
+		
+
+		/**
+		 * Retrieves the admin note that has been built to be sent to the student's admin_notes file. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */	
+
+		public function get_admin_note()
+		{
+
+			return $this->admin_note;
+		
+		}
+		 
+
 		
 		/**
 		 * (description)

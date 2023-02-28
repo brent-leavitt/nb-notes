@@ -210,9 +210,20 @@ if( !class_exists( 'Director' ) ){
 			$this->recorder->record( $package, $sent ); 
 
 			//Add Admin_Note meta data to student file (if applicable)
-			if( method_exists( $this->builder, 'get_admin_note' ) &&
-				( $admin_note =  $this->builder->get_admin_note() ) )
-				$this->recorder->add_admin_note( $this->receiver_id, $this->sender_id, $admin_note ); 
+			$user = get_user_by( 'id', $this->receiver_id ); 
+			
+			if ( in_array( 'student', (array) $user->roles ) ) 
+			{
+				if( method_exists( $this->builder, 'get_admin_note' ) &&
+					( $admin_note =  $this->builder->get_admin_note() ) )
+					{
+						if( !empty( $admin_note ) )
+							$this->recorder->add_admin_note( $this->receiver_id, $admin_note ); 
+					}
+			}
+
+			
+				
 			
 			$this->set( 'result', $sent ); 
 		}	

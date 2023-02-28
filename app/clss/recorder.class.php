@@ -268,18 +268,20 @@ if( !class_exists( 'Recorder' ) ){
 		}
 			
 
-		
-		
 		/**
 		 * (description)
 		 *
 		 * @since     1.0.0
-		 * @param     $view
-		 * @return    (type)    (description)
-		 */
-		private function get_(){
+		 * @param  	  int 		$receiver_id 	//Should be a student's ID
+		 * @param     string 	$admin_note		//The message to be commited to the database. 
+		 * @param     int		$sender_id 		//typically will be 0 for system.
+		 * @return    NULL
+		 */	
+
+		public function add_admin_note( $receiver_id, $admin_note, $sender_id = 0 )
+		{
+			 nb_add_admin_student_note( $receiver_id, $admin_note, $sender_id ); 
 		
-			
 		}
 
 
@@ -290,6 +292,7 @@ if( !class_exists( 'Recorder' ) ){
 		 * @param     $view
 		 * @return    (type)    (description)
 		 */	 
+
 		public function _()
 		{
 

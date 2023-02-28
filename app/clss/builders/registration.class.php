@@ -42,6 +42,16 @@ if( !class_exists( 'Registration' ) ){
 		private $args; 
 		
 		
+		/**
+		 * Admin Note 
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      string
+		 */
+		protected $admin_note = ''; 
+		
+		
 		//Methods
 
 		/**
@@ -79,6 +89,9 @@ if( !class_exists( 'Registration' ) ){
 
 			//assign incoming subject to subject property. 
 			$this->subject = $params[ 'subject' ]; 
+
+			//Build an admin_note. 
+			$this->build_admin_note(); 
 			
 			//Finalize the notification to be sent. 
 			$this->finalize(); 
@@ -158,6 +171,34 @@ if( !class_exists( 'Registration' ) ){
 
 			 return $receipt; 
 		 }
+		
+		/**
+		 * Builds the admin note to be recorded the student's file. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */	 
+		protected function build_admin_note()
+		{
+
+			$this->admin_note = ''; 
+		
+		}
+		
+		/**
+		 * Retrieves the admin note that has been built to be sent to the student's admin_notes file. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		
+		public function get_admin_note()
+		{
+
+			return $this->admin_note;
+		
+		} */	 
 		
 		/**
 		 * (description)

@@ -42,8 +42,38 @@ if( !class_exists( 'Reassignment' ) ){
 		 * @var      array 
 		 */
 		private $args; 
+				
+		
+		/**
+		 * Old Trainer
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      object 
+		 */
+		private $old_trainer; 
+				
+		
+		/**
+		 * New Trainer
+		 *
+		 * @since    1.0.0
+		 * @access   private 
+		 * @var      object
+		 */
+		private $new_trainer; 
 		
 		
+		/**
+		 * Admin Note 
+		 *
+		 * @since    1.0.0
+		 * @access   protected 
+		 * @var      string
+		 */
+		protected $admin_note = ''; 
+		
+			
 
 		
 		//Methods
@@ -91,12 +121,18 @@ if( !class_exists( 'Reassignment' ) ){
 			//process incoming content, run shortcodes on it, then assign to content property. 
 			$this->content = $params[ 'content' ]; //do_shortcode( $params[ 'content' ] ); //I don't think this works.  
 
+			//Add Trainers
+			$this->add_trainers(); 
+
 			//call and append the assignment receipt.
 			$this->content .= $this->add_receipt( $html );
 
 			//assign incoming subject to subject property. 
 			$this->subject = $params[ 'subject' ]; 
 			
+			//Build an admin_note. 
+			$this->build_admin_note(); 
+
 			//Finalize the notification to be sent. 
 			$this->finalize(); 
 	
@@ -132,9 +168,9 @@ if( !class_exists( 'Reassignment' ) ){
 			 $student_id =  $args[ 'student' ]; 
 			 $student = get_user_by( 'id', $args[ 'student' ] ); 
 			 $student_profile = home_url('/wp-admin/admin.php?page=edit_student&student_id=') . $student_id;
-
-			 $old_trainer = get_user_by( 'id', $args[ 'trainers' ][ 'old_trainer' ] );
-			 $new_trainer = get_user_by( 'id', $args[ 'trainers' ][ 'new_trainer' ] );
+					
+			 $old_trainer = $this->old_trainer;
+			 $new_trainer = $this->new_trainer;
 
 			 $receipt ="
 			 ========================
@@ -164,10 +200,8 @@ if( !class_exists( 'Reassignment' ) ){
 		 
 		 private function build_html_receipt(): string
 		 {
-			$args = $this->args;
-		
-			$old_trainer = get_user_by( 'id', $args[ 'trainers' ][ 'old_trainer' ] );
-			$new_trainer = get_user_by( 'id', $args[ 'trainers' ][ 'new_trainer' ] );
+			$old_trainer = $this->old_trainer;
+			$new_trainer = $this->new_trainer;
 			
 			$hr = '<hr style="border: #e5e5e5 1px solid;" >';
 			
@@ -181,6 +215,56 @@ if( !class_exists( 'Reassignment' ) ){
 			 return $receipt; 
 		 }
 				
+
+		
+		/**
+		 * Builds the admin note to be recorded the student's file. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */	 
+
+		protected function build_admin_note()
+		{
+			$old_trainer = $this->old_trainer;
+			$new_trainer = $this->new_trainer;
+
+			$this->admin_note = "The trainer has been reassigned. The previous trainer was {$old_trainer->first_name} {$old_trainer->last_name}, and the new trainer is {$new_trainer->first_name} {$new_trainer->last_name}. All three parties have been notified."; 
+		}
+		
+
+		/**
+		 * Retrieves the admin note that has been built to be sent to the student's admin_notes file. 
+		 *
+		 * @since     1.0.0
+		 * @param     $view
+		 * @return    (type)    (description)
+		 */	
+
+		public function get_admin_note()
+		{
+			return $this->admin_note;
+		}
+
+
+		
+		/**
+		 * Load old and new trainer object to their respective properties. 
+		 *
+		 * @since     1.0.0
+		 * @return    NULL
+		 */	 
+		private function add_trainers()
+		{
+
+			$args = $this->args;
+
+			$this->old_trainer = get_user_by( 'id', $args[ 'trainers' ][ 'old_trainer' ] );
+			$this->new_trainer = get_user_by( 'id', $args[ 'trainers' ][ 'new_trainer' ] );
+		
+		}
+
 		
 		/**
 		 * (description)
