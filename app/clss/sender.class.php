@@ -172,7 +172,7 @@ if( !class_exists( 'Sender' ) ){
 			//Do a little more work if we are sending an HTML formatted email. 
 			if( strcmp( $this->format, 'html' ) === 0 )
 			{
-				include( NB_NOTES_PATH. 'app/tmpl/email/html_wrapper.php' ); 
+				include( NB_NOTES_PATH. 'app/tmpl/email/html_wrapper1.php' ); 
 				$this->content = $nb_html_header . $this->content . $nb_html_footer;
 
 				$this->headers[] = 'Content-Type: text/html; charset=UTF-8'; 
