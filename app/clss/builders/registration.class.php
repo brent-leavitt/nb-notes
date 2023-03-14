@@ -153,13 +153,26 @@ if( !class_exists( 'Registration' ) ){
 		
 			
 			$hr = '<hr style="border: #e5e5e5 1px solid;" >';
-			
+			$a_class = 'style="color:#AC1B5C;"';
+
 			$receipt ="
 			{$hr}
 			
 			<h2>What Are My Next Steps?</h2>
 			
-			<p>(To be continued... )</p>
+			<ol>
+				<li>Meet your trainer/schedule a coachng call</li>
+				<li>Order your books</li>
+				<li>Start your training</li>
+			</ol>
+			<p>Each step is further detailed below.</p>
+			{$hr}
+			<h3>Meet Your Trainer/Schedule a Coaching Call</h3>
+			<p>Shortly, you will be receiving an email that will introduce your doula trainer. These are real human beings with real lives! (No robots) Within the first week of starting your training, your doula trainer will reach out to you to setup a coaching call. This coaching call is the perfect time to ask questions about your goals and objectives in training to become a doula, ask questions about course specifics and to get to know your trainer better! </p>
+			<h3>Order Your Books</h3>
+			<p>As you are getting started with your training, you will need to order the required texts for your specific program. These books can be found in the introductory material for your course of study. They can typically be obtained from popular online book sellers in print or digital format. We recommend securing your own personal copy, though you may also find copies at a local library. <a {$a_class} href='https://www.trainingdoulas.com/books/'>View Required Books.</a></p>
+			<h3>Start Your Training</h3>
+			<p>Access to your training materials starts immediately upon receipt of payment for a course subscription. You are free to start your training immediately, reading course materials and submitting assignments as soon as you are able to complete all requirements (books may be required to complete a given assignment). Though we recommend you progress through the training chronologically, you are free to proceed in any order that works best for you. You can submit multiple assignments at once, before a trainer has graded any given assignment. For more details on course-related questions, <a {$a_class} href='https://www.trainingdoulas.com/questions-about-becoming-a-doula-faq/'>visit the FAQ page.</a></p>
 
 
 

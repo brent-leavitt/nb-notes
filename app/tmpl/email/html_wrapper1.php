@@ -109,7 +109,7 @@ $nb_html_header='
 								<table width="100%" border="0" cellpadding="0" cellspacing="0" class="nn_cols-one" style="border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;table-layout:fixed;margin-left:auto;margin-right:auto;padding-left:0;padding-right:0">
 								  <tbody>
 									<tr>
-									  <td class="nn_text nn_padded_vertical nn_padded_side" valign="top" style="border-collapse:collapse;padding-top:10px;padding-bottom:10px;padding-left:20px;padding-right:20px;word-break:break-word;word-wrap:break-word; font-family:Raleway,CenturyGothic,AppleGothic,sans-serif;">
+									  <td class="nn_text nn_padded_vertical nn_padded_side" valign="top" style="border-collapse:collapse;padding-top:10px;padding-bottom:10px;padding-left:30px;padding-right:30px;word-break:break-word;word-wrap:break-word; font-family:Raleway,CenturyGothic,AppleGothic,sans-serif; line-height: 24px;font-weight: 400; font-style: normal; font-size: 16px; color: #7D7C81;">
 									 	<!-- end HEADER TEMPLATE -->
 ';
 
