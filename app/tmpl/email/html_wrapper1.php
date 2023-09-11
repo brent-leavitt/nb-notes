@@ -40,7 +40,7 @@ $nb_html_header='
       <tbody> 
         <tr>
           <td class="nn_preheader" style="border-collapse:collapse;display:none;visibility:hidden;mso-hide:all;font-size:1px;color:#333333;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;-webkit-text-size-adjust:none" height="1">
-            Template Email - New Beginnings Doula Training
+		  '. $this->subject .' - New Beginnings Doula Training
           </td>
         </tr>
         <tr>

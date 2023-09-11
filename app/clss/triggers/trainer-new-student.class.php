@@ -59,7 +59,7 @@ if( !class_exists( 'Trainer_New_Student' ) ){
 		 public function init( ...$args ) {
 
 			//This is where the incoming parameter data is received. 
-			//error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
+			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 			
 			//student ID
 			$this->target_id = $args[ 0 ]; 

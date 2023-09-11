@@ -1,6 +1,6 @@
 <?php 
 Namespace Nb_Notes\App\Func;
-use Nb_Notes\App\Clss\Controller; 
+use Nb_Notes\App\Clss\Director; 
 
 /**
  * (description here)
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 /**
- * fires a notification to be processed. This is a helper function to allow outside functions to access the nb-notes controller class and subsequent actions.
+ * fires a notification to be processed. This is a helper function to allow outside functions to access the nb-notes Director class and subsequent actions.
  * 
  *
  * @since     1.0.0
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 function notifiy( int $receiver_id, int $sender_id, string $builder, array $params, bool $html = true ):bool
 {
 
-    $control =  new Controller( $receiver_id, $sender_id, $builder, $params, $html ); 
+    $control =  new Director( $receiver_id, $sender_id, $builder, $params, $html ); 
 
     $control->go();  
 
