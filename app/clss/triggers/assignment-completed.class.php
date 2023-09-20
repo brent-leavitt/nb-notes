@@ -54,7 +54,7 @@ if( !class_exists( 'Assignment_Completed' ) ){
 		public function init( ...$args ) {
 
 			//This is where the incoming parameter data is received. 
-			error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
+			//error_log( "The ". __FILE__ ."::". __METHOD__ ." has been called. Here are the paramaters being passed. ". var_export( $args, true ) );
 			
 			//The assignment ID is the only argument being passed to the builder from this trigger. 
 			$this->args[ 'asmt_id' ] = $args[ 0 ];

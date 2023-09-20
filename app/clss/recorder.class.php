@@ -231,9 +231,9 @@ if( !class_exists( 'Recorder' ) ){
 			$this->init( $package );
 			$this->mark_status( $sent );
 
-			error_log( __METHOD__ . ": " . __LINE__ . ' We are going to record this in the database : ' . var_export( $this, true ) );		
+			//error_log( __METHOD__ . ": " . __LINE__ . ' We are going to record this in the database : ' . var_export( $this, true ) );		
 			$inserted_id = $this->commit();	
-			error_log( __METHOD__ . ": " . __LINE__ . " Inserted into database? Insert ID : {$inserted_id}" );
+			//error_log( __METHOD__ . ": " . __LINE__ . " Inserted into database? Insert ID : {$inserted_id}" );
 
 			if( $inserted_id === 0 )
 				error_log( 'Failed to insert the note in the database for: ' . var_export( $this, true ) ); 

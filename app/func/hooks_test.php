@@ -22,7 +22,7 @@ add_action( 'nb_assignment_resubmitted', function( $a, $b ){
 }, 10, 2 ); 
 
 add_action( 'nb_assignment_completed', function( $a, $b ){
-    error_log( 'Called from nb_assignment_completed hook in: ' .__FILE__ ); 
+   //error_log( 'Called from nb_assignment_completed hook in: ' .__FILE__ ); 
 }, 10, 2 ); 
 
 add_action( 'nb_assignment_incomplete', function( $a, $b ){
